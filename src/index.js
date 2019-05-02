@@ -11,55 +11,54 @@ var board = document.querySelector("section");
 
 // renderBoard(boardMatrix, board, getCoordinates);
 
-// board.addEventListener("click", getCoordinates);
-
 ///the move object
-let playerMove = {
-  xStart: null,
-  yStart: null,
-  xEnd: null,
-  yEnd: null,
-  reset() {
-    this.xStart = null;
-    this.yStart = null;
-    this.xEnd = null;
-    this.yEnd = null;
-  }
-};
+// let playerMove = {
+//   xStart: null,
+//   yStart: null,
+//   xEnd: null,
+//   yEnd: null,
+//   reset() {
+//     this.xStart = null;
+//     this.yStart = null;
+//     this.xEnd = null;
+//     this.yEnd = null;
+//   }
+// };
 
 // let body = document.querySelector("div");
-let playerData = document.getElementById("player-data");
+// let playerData = document.getElementById("player-data");
 
-let userPlayFrom = document.createElement("p");
-userPlayFrom.textContent = "Move from: ";
+// let userPlayFrom = document.createElement("p");
+// userPlayFrom.textContent = "Move from: ";
 
-let userPlayTo = document.createElement("p");
-userPlayTo.textContent = "Move to: ";
+// let userPlayTo = document.createElement("p");
+// userPlayTo.textContent = "Move to: ";
 
-playerData.appendChild(userPlayFrom);
-playerData.appendChild(userPlayTo);
+// playerData.appendChild(userPlayFrom);
+// playerData.appendChild(userPlayTo);
 
 ////////////
-// create submit to submit the input and output
-let submit = document.createElement("button");
-submit.textContent = "Submit Move";
-playerData.appendChild(submit);
-submit.addEventListener("click", clickHandler);
 
-function getCoordinates(e) {
-  e.preventDefault();
-  console.log("the target id: ", e.target.id.split(""));
-  let coordinate = e.target.id.split("");
-  if (playerMove.xStart === null) {
-    playerMove.xStart = parseInt(coordinate[0], 10);
-    playerMove.yStart = parseInt(coordinate[1], 10);
-    appendTextNode(userPlayFrom, playerMove.yStart, playerMove.xStart);
-  } else if (playerMove.xEnd === null) {
-    playerMove.xEnd = parseInt(coordinate[0], 10);
-    playerMove.yEnd = parseInt(coordinate[1], 10);
-    appendTextNode(userPlayTo, playerMove.yEnd, playerMove.xEnd);
-  }
-}
+// function getCoordinates(e) {
+//   e.preventDefault();
+//   console.log("the target id: ", e.target.id.split(""));
+//   let coordinate = e.target.id.split("");
+//   if (playerMove.xStart === null) {
+//     playerMove.xStart = parseInt(coordinate[0], 10);
+//     playerMove.yStart = parseInt(coordinate[1], 10);
+//     appendTextNode(userPlayFrom, playerMove.yStart, playerMove.xStart);
+//   } else if (playerMove.xEnd === null) {
+//     playerMove.xEnd = parseInt(coordinate[0], 10);
+//     playerMove.yEnd = parseInt(coordinate[1], 10);
+//     appendTextNode(userPlayTo, playerMove.yEnd, playerMove.xEnd);
+//   }
+// }
+
+// create submit to submit the input and output
+// let submit = document.createElement("button");
+// submit.textContent = "Submit Move";
+// playerData.appendChild(submit);
+// submit.addEventListener("click", clickHandler);
 
 function clickHandler(e) {
   e.preventDefault();
@@ -87,12 +86,12 @@ function clickHandler(e) {
   resetPlayerData();
 }
 
-function resetPlayerData() {
-  userPlayFrom.textContent = "Move from: ";
-  userPlayTo.textContent = "Move to: ";
-}
+// function resetPlayerData() {
+//   userPlayFrom.textContent = "Move from: ";
+//   userPlayTo.textContent = "Move to: ";
+// }
 
-function appendTextNode(appendTo, row, col) {
-  let textNode = document.createTextNode(`row = ${row}, col=${col}`);
-  appendTo.appendChild(textNode);
-}
+// function appendTextNode(appendTo, row, col) {
+//   let textNode = document.createTextNode(`row = ${row}, col=${col}`);
+//   appendTo.appendChild(textNode);
+// }
