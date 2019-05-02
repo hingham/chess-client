@@ -1,0 +1,96 @@
+@import url("https://fonts.googleapis.com/css?family=Dosis|Quicksand");
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: rgb(219, 219, 219);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  flex: 1;
+}
+
+#app {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-items: space-around;
+  margin: 1em;
+}
+
+body > * {
+  font-family: "Quicksand", sans-serif;
+}
+
+#player-data {
+  background-color: white;
+  width: calc(100vw / 4);
+  height: fit-content;
+  margin: 0 2em;
+  padding: 0.5em;
+}
+
+h2 {
+  margin: 0;
+}
+
+.rowContainer {
+  display: flex;
+}
+
+.columnsContainer {
+  display: flex;
+  flex-direction: columns;
+}
+
+span {
+  width: calc(100vh / 16);
+  height: calc(100vh / 16);
+  margin: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+span:hover {
+  background-color: white;
+}
+
+.black {
+  background-color: gray;
+  cursor: pointer;
+}
+
+.salmon {
+  background-color: rgb(216, 133, 100);
+  cursor: pointer;
+}
+
+.grid {
+  background-color: white;
+}
+
+input {
+  /* display: block; */
+  margin: 5px;
+}
+
+/* button {
+  background-color: rgb(70, 68, 68);
+  color: white;
+  border-radius: 10px;
+  font-size: 1.2em;
+} */
+
+/* button:hover {
+  background-color: black;
+} */
+
+
+/*# sourceMappingURL=/styles.dd855970.css.map */

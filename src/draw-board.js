@@ -1,4 +1,5 @@
 export default function(boardMatrix, boardContainer, eventCallback) {
+  console.log('draw board');
   for (let i = 0; i < boardMatrix.length; i++) {
     let row = document.createElement("div");
     row.setAttribute("class", "rowContainer");
