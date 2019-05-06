@@ -22,10 +22,10 @@ export class ChessPieces {
     console.log("temp");
     matrix[y1][x1] = null;
     matrix[y2][x2] = temp;
-    let movedFrom = document.getElementById(`${x1}${y1}`);
-    movedFrom.innerHTML = matrix[y1][x1];
-    let movedTo = document.getElementById(`${x2}${y2}`);
-    movedTo.innerHTML = matrix[y2][x2].hex;
+    // let movedFrom = document.getElementById(`${x1}${y1}`);
+    // movedFrom.innerHTML = matrix[y1][x1];
+    // let movedTo = document.getElementById(`${x2}${y2}`);
+    // movedTo.innerHTML = matrix[y2][x2].hex;
     console.log("place it is moving", matrix[y2][x2]);
   }
 

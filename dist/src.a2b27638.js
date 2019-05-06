@@ -234,11 +234,11 @@ function () {
       var temp = matrix[y1][x1];
       console.log("temp");
       matrix[y1][x1] = null;
-      matrix[y2][x2] = temp;
-      var movedFrom = document.getElementById("".concat(x1).concat(y1));
-      movedFrom.innerHTML = matrix[y1][x1];
-      var movedTo = document.getElementById("".concat(x2).concat(y2));
-      movedTo.innerHTML = matrix[y2][x2].hex;
+      matrix[y2][x2] = temp; // let movedFrom = document.getElementById(`${x1}${y1}`);
+      // movedFrom.innerHTML = matrix[y1][x1];
+      // let movedTo = document.getElementById(`${x2}${y2}`);
+      // movedTo.innerHTML = matrix[y2][x2].hex;
+
       console.log("place it is moving", matrix[y2][x2]);
     } //check if the move exists in the possible move object
 
@@ -939,9 +939,10 @@ function _default(boardMatrix, boardContainer, eventCallback) {
         square.innerHTML = boardMatrix[i][j].hex;
       }
 
-      if (i === 0 || j === 0) {
-        square.setAttribute("class", "grid");
+      if (i === 0) {
         square.innerHTML = boardMatrix[i][j];
+      } else if (j === 0) {
+        square.innerHTML = -1 * boardMatrix[i][j] + 9;
       } else if (i % 2 === 0) {
         j % 2 === 0 ? square.setAttribute("class", "black") : square.setAttribute("class", "salmon");
       } else {
@@ -949,10 +950,11 @@ function _default(boardMatrix, boardContainer, eventCallback) {
       }
 
       row.appendChild(square);
-      square.addEventListener("click", eventCallback);
     }
 
+    document.getElementById('player-move').setAttribute('class', '');
     boardContainer.appendChild(row);
+    boardContainer.addEventListener("click", eventCallback);
   }
 }
 },{}],"node_modules/parseuri/index.js":[function(require,module,exports) {
@@ -9403,6 +9405,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getCoordinates = getCoordinates;
 exports.resetPlayerData = resetPlayerData;
+exports.handleMoveSubmit = handleMoveSubmit;
 exports.playerMove = void 0;
 ///the move object
 var playerMove = {
@@ -9418,71 +9421,67 @@ var playerMove = {
   }
 };
 exports.playerMove = playerMove;
-var body = document.querySelector("div");
-var playerData = document.getElementById("player-data");
+var moveContainer = document.getElementById("player-move");
 var userPlayFrom = document.createElement("p");
-userPlayFrom.textContent = "Move from: ";
+userPlayFrom.textContent = "At: ";
 var userPlayTo = document.createElement("p");
-userPlayTo.textContent = "Move to: ";
-playerData.appendChild(userPlayFrom);
-playerData.appendChild(userPlayTo); // returns the player object with the move values
+userPlayTo.textContent = "To: ";
+moveContainer.appendChild(userPlayFrom);
+moveContainer.appendChild(userPlayTo);
+
+function handleMoveSubmit(dataHandler) {
+  // create submit to submit the input and output
+  var submit = document.createElement("button");
+  submit.textContent = "Submit Move";
+  moveContainer.appendChild(submit);
+  submit.addEventListener("click", dataHandler);
+} // returns the player object with the move values
+
 
 function getCoordinates(e) {
   e.preventDefault();
   console.log("the target id: ", e.target.id.split(""));
-  var coordinate = e.target.id.split("");
+  var coordinate = e.target.id.split("").map(function (val) {
+    return parseInt(val, 10);
+  });
+  var xLetter = String.fromCharCode(coordinate[0] + 96);
+  var yNum = -1 * coordinate[1] + 9;
 
   if (playerMove.xStart === null) {
-    playerMove.xStart = parseInt(coordinate[0], 10);
-    playerMove.yStart = parseInt(coordinate[1], 10);
-    appendTextNode(userPlayFrom, playerMove.yStart, playerMove.xStart);
+    playerMove.xStart = coordinate[0];
+    playerMove.yStart = coordinate[1];
+    appendTextNode(userPlayFrom, yNum, xLetter);
   } else if (playerMove.xEnd === null) {
-    playerMove.xEnd = parseInt(coordinate[0], 10);
-    playerMove.yEnd = parseInt(coordinate[1], 10);
-    appendTextNode(userPlayTo, playerMove.yEnd, playerMove.xEnd);
+    playerMove.xEnd = coordinate[0];
+    playerMove.yEnd = coordinate[1];
+    appendTextNode(userPlayTo, yNum, xLetter);
   }
 }
 
 function appendTextNode(appendTo, row, col) {
-  var textNode = document.createTextNode("row = ".concat(row, ", col=").concat(col));
+  var textNode = document.createTextNode("".concat(row, ", ").concat(col));
   appendTo.appendChild(textNode);
 }
 
 function resetPlayerData() {
-  userPlayFrom.textContent = "Move from: ";
-  userPlayTo.textContent = "Move to: ";
-} // create submit to submit the input and output
-// let submit = document.createElement("button");
-// submit.textContent = "Submit Move";
-// playerData.appendChild(submit);
-// submit.addEventListener("click", submitMoveHandler);
-// function submitMoveHandler(e) {
-//   e.preventDefault();
-//   if (
-//     boardMatrix[playerMove.yStart][playerMove.xStart] &&
-//     playerMove.xEnd !== null
-//   ) {
-// if (boardMatrix[playerMove.yEnd][playerMove.xEnd] !== null) {
-//   alert("That space is already occupied. Please try again");
-// } else {
-//   this logic needs to move to the server
-//   player1.move(boardMatrix, playerMove);
-//   let moved = boardMatrix[playerMove.yStart][
-//     playerMove.xStart
-//   ].checkAndUpdate(playerMove.xEnd, playerMove.yEnd, boardMatrix);
-//   if (!moved) {
-//     alert("Not a valid move, please try again.");
-//   }
-//     }
-//   } else {
-//     alert("There is no piece on the board at that position. Please try again.");
-//   }
-//   playerMove.reset();
-//   resetPlayerData();
-// }
-// function resetPlayerData() {
-//   userPlayFrom.textContent = "Move from: ";
-//   userPlayTo.textContent = "Move to: ";
+  userPlayFrom.textContent = "At: ";
+  userPlayTo.textContent = "To: ";
+} // function renderPlayerTurnData() {
+//   let data = document.getElementById("player-data");
+//   data.innerHTML = "";
+//   let h3 = document.createElement("h3");
+//   h3.textContent = "Making a Move:";
+//   let p = document.createElement("p");
+//   p.textContent = `Click piece you want to move. Then, click where would like to move.
+// If the move is vaild, the board will be updated.`;
+//   data.appendChild(h3);
+//   data.appendChild(p);
+//   let userPlayFrom = document.createElement("p");
+//   userPlayFrom.textContent = "At: ";
+//   let userPlayTo = document.createElement("p");
+//   userPlayTo.textContent = "To: ";
+//   data.appendChild(userPlayFrom);
+//   data.appendChild(userPlayTo);
 // }
 },{}],"src/game-app.js":[function(require,module,exports) {
 "use strict";
@@ -9491,12 +9490,11 @@ var _socket = _interopRequireDefault(require("socket.io-client"));
 
 var _drawBoard = _interopRequireDefault(require("./draw-board.js"));
 
-var _board = _interopRequireDefault(require("./board.js"));
-
 var _getCoordinates = require("./get-coordinates.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// import {getMoveData, resetMoveData} from "./render-move-data.js"
 // import from "./get-coordinates.js"
 (function () {
   console.log("iffe");
@@ -9509,8 +9507,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   var boardContainer = document.querySelector("section");
   var newGame = document.getElementById("new-game");
   newGame.addEventListener("click", handleNewGame);
-  var joinGame = document.getElementById("game-container");
-  joinGame.addEventListener("click", handleJoinGame);
+  var joinGame = document.getElementById("game-container"); // joinGame.addEventListener("click", handleJoinGame);
 
   function handleNewGame(e) {
     e.preventDefault();
@@ -9518,7 +9515,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     var name = document.getElementById("player-1-name").value;
     console.log(name);
 
-    if (!name) {//alert notice to enter the name
+    if (!name) {
+      alert("Please enter your name.");
+      return;
     }
 
     socket.emit("createGame", {
@@ -9529,10 +9528,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
   socket.on("connectToNewGame", function (data) {
     //display this message as appropriate
-    console.log('data, ', data);
+    var heading = document.querySelector("h4");
+    heading.textContent = "Join a existing game";
     var gameId = document.createElement("p");
     gameId.setAttribute("id", data.name);
-    gameId.textContent = "Join ".concat(data.name, "'s game!");
+    gameId.textContent = "".concat(data.name[0].toUpperCase()).concat(data.name.slice(1), "'s game!");
+    gameId.addEventListener("click", handleJoinGame);
     joinGame.appendChild(gameId);
   });
 
@@ -9540,8 +9541,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     e.preventDefault(); //click the game they would like to join, then be prompted to enter in their name
 
     var roomId = e.target.id;
-    console.log("trying to join a game with id: ", roomId);
-    var name = "player2";
+    console.log("trying to join a game with id: ", roomId); // let name = "player2";
+
     socket.emit("joinGame", {
       room: roomId,
       name: roomId
@@ -9549,72 +9550,99 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   }
 
   socket.on("player1", function (data) {
-    console.log('player 1 screen');
-    document.getElementById('enter-game').innerHTML = "waiting for your opponent to join your game...";
+    console.log("player 1 screen");
+    document.getElementById("enter-game").innerHTML = "waiting for your opponent to join your game...";
+    document.querySelector("body").setAttribute("class", "background-white");
   });
   socket.on("player2", function (data) {
-    console.log('player 2 screen');
-    var text1 = document.createElement('h3');
+    console.log("player 2 screen", "socket1", data.socket1);
+    var text1 = document.createElement("h3");
     text1.textContent = "You've joined ".concat(data.name, "'s game!");
-    ;
-    var text2 = document.createElement('h3');
+    var text2 = document.createElement("h3");
     text2.textContent = "Please enter your name below:";
-    var input = document.createElement('input');
-    input.setAttribute('id', 'player-2-name');
-    var button = document.createElement('button');
+    var input = document.createElement("input");
+    input.setAttribute("id", "player-2-name");
+    var button = document.createElement("button");
     button.textContent = "Enter Game";
-    gameContainer.innerHTML = '';
+    gameContainer.innerHTML = "";
     gameContainer.appendChild(text1);
     gameContainer.appendChild(text2);
     gameContainer.appendChild(input);
     gameContainer.appendChild(button);
-    button.addEventListener('click', function (e) {
+    button.addEventListener("click", function (e) {
       e.preventDefault();
-      var player2Name = document.getElementById('player-2-name').value;
+      var player2Name = document.getElementById("player-2-name").value;
 
       if (player2Name) {
         console.log(player2Name);
-        socket.emit('bothPlayersJoined', {
+        socket.emit("bothPlayersJoined", {
           room: data.name,
+          socket1: data.socket1,
           player1: data.name,
+          socket2: socket.id,
           player2: player2Name
         });
       }
     });
-  });
-  socket.on('drawBoard', function (game) {
-    console.log('the game', game);
-    newGame.remove();
-    (0, _drawBoard.default)(game.board, boardContainer, _getCoordinates.getCoordinates);
-    var playerData = document.getElementById("player-data");
-    var userPlayFrom = document.createElement("p");
-    userPlayFrom.textContent = "Move from: ";
-    var userPlayTo = document.createElement("p");
-    userPlayTo.textContent = "Move to: ";
-    playerData.appendChild(userPlayFrom);
-    playerData.appendChild(userPlayTo); // create submit to submit the input and output
+  }); // game obj {gameId: name, board: matrix, playerMove: player Move Obj, player1: name, player2: name }
 
-    var submit = document.createElement("button");
-    submit.textContent = "Submit Move";
-    playerData.appendChild(submit);
-    submit.addEventListener("click", submitMoveHandler);
+  socket.on("drawBoard", function (data) {
+    console.log("the game", data, "the socket", socket.id, 'player move', data.playerMove);
+    var heading = document.querySelector("h2");
+    heading.textContent = "".concat(data.player1.toUpperCase(), " vs ").concat(data.player2.toUpperCase());
 
-    function submitMoveHandler(e) {
-      if (_getCoordinates.playerMove.xEnd && _getCoordinates.playerMove.yEnd) {
-        game.playerMove = _getCoordinates.playerMove;
-        socket.emit('playerMoved', {
-          playerMove: game.playerMove,
-          roomId: game.roomId
-        });
+    if (data.playerMove !== null) {
+      console.log("moving player", data.playerMove);
+      var _data$playerMove = data.playerMove,
+          xStart = _data$playerMove.xStart,
+          yStart = _data$playerMove.yStart,
+          xEnd = _data$playerMove.xEnd,
+          yEnd = _data$playerMove.yEnd;
+      var movedFrom = document.getElementById("".concat(xStart).concat(yStart));
+      var hex = movedFrom.innerHTML;
+      movedFrom.innerHTML = null;
+      var movedTo = document.getElementById("".concat(xEnd).concat(yEnd));
+      movedTo.innerHTML = hex;
+    } else {
+      var submitMoveHandler = function submitMoveHandler(e) {
+        if (_getCoordinates.playerMove.xEnd && _getCoordinates.playerMove.yEnd) {
+          // data.playerMove = playerMove;
+          socket.emit("playerMoved", {
+            playerMove: _getCoordinates.playerMove,
+            player1: data.player1,
+            player2: data.player2,
+            gameId: data.gameId
+          });
 
-        _getCoordinates.playerMove.reset();
+          _getCoordinates.playerMove.reset();
 
-        (0, _getCoordinates.resetPlayerData)();
-      }
+          (0, _getCoordinates.resetPlayerData)();
+        }
+      };
+
+      newGame.remove();
+      gameContainer.remove();
+      (0, _drawBoard.default)(data.board, boardContainer, _getCoordinates.getCoordinates);
+      (0, _getCoordinates.handleMoveSubmit)(submitMoveHandler);
     }
   });
+  socket.on("wait", function () {
+    var data = document.getElementById('player-move');
+    data.setAttribute('class', 'hidden');
+    var wait = document.getElementById('wait');
+    wait.setAttribute('class', '');
+  });
+  socket.on("go", function () {
+    var wait = document.getElementById('wait');
+    wait.setAttribute('class', 'hidden');
+    var data = document.getElementById('player-move');
+    data.setAttribute('class', '');
+  });
+  socket.on("unvalidMove", function (message) {
+    alert(message);
+  });
 })();
-},{"socket.io-client":"node_modules/socket.io-client/lib/index.js","./draw-board.js":"src/draw-board.js","./board.js":"src/board.js","./get-coordinates.js":"src/get-coordinates.js"}],"src/index.js":[function(require,module,exports) {
+},{"socket.io-client":"node_modules/socket.io-client/lib/index.js","./draw-board.js":"src/draw-board.js","./get-coordinates.js":"src/get-coordinates.js"}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
 require("./styles.css");
@@ -9673,30 +9701,31 @@ var board = document.querySelector("section"); // renderBoard(boardMatrix, board
 // submit.textContent = "Submit Move";
 // playerData.appendChild(submit);
 // submit.addEventListener("click", clickHandler);
-
-function clickHandler(e) {
-  e.preventDefault();
-
-  if (_board.default[playerMove.yStart][playerMove.xStart] && playerMove.xEnd !== null) {
-    if (_board.default[playerMove.yEnd][playerMove.xEnd] !== null) {
-      alert("That space is already occupied. Please try again");
-    } else {
-      // returns boolean true if piece was successfully moved
-      player1.move(_board.default, playerMove);
-
-      var moved = _board.default[playerMove.yStart][playerMove.xStart].checkAndUpdate(playerMove.xEnd, playerMove.yEnd, _board.default);
-
-      if (!moved) {
-        alert("Not a valid move, please try again.");
-      }
-    }
-  } else {
-    alert("There is no piece on the board at that position. Please try again.");
-  }
-
-  playerMove.reset();
-  resetPlayerData();
-} // function resetPlayerData() {
+// function clickHandler(e) {
+//   e.preventDefault();
+//   if (
+//     boardMatrix[playerMove.yStart][playerMove.xStart] &&
+//     playerMove.xEnd !== null
+//   ) {
+//     if (boardMatrix[playerMove.yEnd][playerMove.xEnd] !== null) {
+//       alert("That space is already occupied. Please try again");
+//     } else {
+//       // returns boolean true if piece was successfully moved
+//       player1.move(boardMatrix, playerMove);
+//       let moved = boardMatrix[playerMove.yStart][
+//         playerMove.xStart
+//       ].checkAndUpdate(playerMove.xEnd, playerMove.yEnd, boardMatrix);
+//       if (!moved) {
+//         alert("Not a valid move, please try again.");
+//       }
+//     }
+//   } else {
+//     alert("There is no piece on the board at that position. Please try again.");
+//   }
+//   playerMove.reset();
+//   resetPlayerData();
+// }
+// function resetPlayerData() {
 //   userPlayFrom.textContent = "Move from: ";
 //   userPlayTo.textContent = "Move to: ";
 // }
@@ -9732,7 +9761,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64943" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62058" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

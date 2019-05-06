@@ -8,6 +8,10 @@ body {
   background-color: rgb(219, 219, 219);
 }
 
+.background-white{
+  background-color: rgb(250, 249, 249);
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -19,7 +23,7 @@ main {
 #app {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   justify-items: space-around;
   margin: 1em;
 }
@@ -28,9 +32,15 @@ body > * {
   font-family: "Quicksand", sans-serif;
 }
 
-#player-data {
+#player-data {  
   background-color: white;
-  width: calc(100vw / 4);
+  height: fit-content;
+  margin: 0 2em;
+  padding: 0.5em;
+}
+
+#wait {  
+  background-color: white;
   height: fit-content;
   margin: 0 2em;
   padding: 0.5em;
@@ -72,22 +82,10 @@ span:hover {
   cursor: pointer;
 }
 
-.grid {
-  background-color: white;
-}
-
 input {
-  /* display: block; */
   margin: 5px;
 }
 
-/* button {
-  background-color: rgb(70, 68, 68);
-  color: white;
-  border-radius: 10px;
-  font-size: 1.2em;
-} */
-
-/* button:hover {
-  background-color: black;
-} */
+.hidden{
+  display: none;
+}

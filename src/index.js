@@ -60,31 +60,31 @@ var board = document.querySelector("section");
 // playerData.appendChild(submit);
 // submit.addEventListener("click", clickHandler);
 
-function clickHandler(e) {
-  e.preventDefault();
-  if (
-    boardMatrix[playerMove.yStart][playerMove.xStart] &&
-    playerMove.xEnd !== null
-  ) {
-    if (boardMatrix[playerMove.yEnd][playerMove.xEnd] !== null) {
-      alert("That space is already occupied. Please try again");
-    } else {
-      // returns boolean true if piece was successfully moved
-      player1.move(boardMatrix, playerMove);
-      let moved = boardMatrix[playerMove.yStart][
-        playerMove.xStart
-      ].checkAndUpdate(playerMove.xEnd, playerMove.yEnd, boardMatrix);
+// function clickHandler(e) {
+//   e.preventDefault();
+//   if (
+//     boardMatrix[playerMove.yStart][playerMove.xStart] &&
+//     playerMove.xEnd !== null
+//   ) {
+//     if (boardMatrix[playerMove.yEnd][playerMove.xEnd] !== null) {
+//       alert("That space is already occupied. Please try again");
+//     } else {
+//       // returns boolean true if piece was successfully moved
+//       player1.move(boardMatrix, playerMove);
+//       let moved = boardMatrix[playerMove.yStart][
+//         playerMove.xStart
+//       ].checkAndUpdate(playerMove.xEnd, playerMove.yEnd, boardMatrix);
 
-      if (!moved) {
-        alert("Not a valid move, please try again.");
-      }
-    }
-  } else {
-    alert("There is no piece on the board at that position. Please try again.");
-  }
-  playerMove.reset();
-  resetPlayerData();
-}
+//       if (!moved) {
+//         alert("Not a valid move, please try again.");
+//       }
+//     }
+//   } else {
+//     alert("There is no piece on the board at that position. Please try again.");
+//   }
+//   playerMove.reset();
+//   resetPlayerData();
+// }
 
 // function resetPlayerData() {
 //   userPlayFrom.textContent = "Move from: ";

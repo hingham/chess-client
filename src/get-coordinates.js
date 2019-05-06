@@ -1,91 +1,84 @@
 ///the move object
 const playerMove = {
-    xStart: null,
-    yStart: null,
-    xEnd: null,
-    yEnd: null,
-    reset() {
-      this.xStart = null;
-      this.yStart = null;
-      this.xEnd = null;
-      this.yEnd = null;
-    }
-  };
+  xStart: null,
+  yStart: null,
+  xEnd: null,
+  yEnd: null,
+  reset() {
+    this.xStart = null;
+    this.yStart = null;
+    this.xEnd = null;
+    this.yEnd = null;
+  }
+};
 
-let body = document.querySelector("div");
-let playerData = document.getElementById("player-data");
+let moveContainer = document.getElementById("player-move");
 
 let userPlayFrom = document.createElement("p");
-userPlayFrom.textContent = "Move from: ";
+userPlayFrom.textContent = "At: ";
 
 let userPlayTo = document.createElement("p");
-userPlayTo.textContent = "Move to: ";
+userPlayTo.textContent = "To: ";
 
-playerData.appendChild(userPlayFrom);
-playerData.appendChild(userPlayTo);
+moveContainer.appendChild(userPlayFrom);
+moveContainer.appendChild(userPlayTo);
+
+function handleMoveSubmit(dataHandler) {
+  // create submit to submit the input and output
+  let submit = document.createElement("button");
+  submit.textContent = "Submit Move";
+  moveContainer.appendChild(submit);
+  submit.addEventListener("click", dataHandler);
+}
 
 // returns the player object with the move values
 function getCoordinates(e) {
-    e.preventDefault();
-    console.log("the target id: ", e.target.id.split(""));
-    let coordinate = e.target.id.split("");
-    if (playerMove.xStart === null) {
-      playerMove.xStart = parseInt(coordinate[0], 10);
-      playerMove.yStart = parseInt(coordinate[1], 10);
-      appendTextNode(userPlayFrom, playerMove.yStart, playerMove.xStart);
-    } else if (playerMove.xEnd === null) {
-      playerMove.xEnd = parseInt(coordinate[0], 10);
-      playerMove.yEnd = parseInt(coordinate[1], 10);
-      appendTextNode(userPlayTo, playerMove.yEnd, playerMove.xEnd);
-    }
+  e.preventDefault();
+  console.log("the target id: ", e.target.id.split(""));
+  let coordinate = e.target.id.split("").map(val => parseInt(val, 10));
+  let xLetter = String.fromCharCode(coordinate[0] + 96);
+  let yNum = -1 * coordinate[1] + 9;
+
+  if (playerMove.xStart === null) {
+    playerMove.xStart = coordinate[0];
+    playerMove.yStart = coordinate[1];
+    appendTextNode(userPlayFrom, yNum, xLetter);
+  } else if (playerMove.xEnd === null) {
+    playerMove.xEnd = coordinate[0];
+    playerMove.yEnd = coordinate[1];
+    appendTextNode(userPlayTo, yNum, xLetter);
   }
+}
 
 function appendTextNode(appendTo, row, col) {
-    let textNode = document.createTextNode(`row = ${row}, col=${col}`);
-    appendTo.appendChild(textNode);
+  let textNode = document.createTextNode(`${row}, ${col}`);
+  appendTo.appendChild(textNode);
 }
 
 function resetPlayerData() {
-    userPlayFrom.textContent = "Move from: ";
-    userPlayTo.textContent = "Move to: ";
+  userPlayFrom.textContent = "At: ";
+  userPlayTo.textContent = "To: ";
 }
 
-// create submit to submit the input and output
-// let submit = document.createElement("button");
-// submit.textContent = "Submit Move";
-// playerData.appendChild(submit);
-// submit.addEventListener("click", submitMoveHandler);
+// function renderPlayerTurnData() {
+//   let data = document.getElementById("player-data");
+//   data.innerHTML = "";
+//   let h3 = document.createElement("h3");
+//   h3.textContent = "Making a Move:";
+//   let p = document.createElement("p");
+//   p.textContent = `Click piece you want to move. Then, click where would like to move.
+// If the move is vaild, the board will be updated.`;
+//   data.appendChild(h3);
+//   data.appendChild(p);
 
-// function submitMoveHandler(e) {
-//   e.preventDefault();
-//   if (
-//     boardMatrix[playerMove.yStart][playerMove.xStart] &&
-//     playerMove.xEnd !== null
-//   ) {
-    // if (boardMatrix[playerMove.yEnd][playerMove.xEnd] !== null) {
-    //   alert("That space is already occupied. Please try again");
-    // } else {
-    //   this logic needs to move to the server
-    //   player1.move(boardMatrix, playerMove);
-    //   let moved = boardMatrix[playerMove.yStart][
-    //     playerMove.xStart
-    //   ].checkAndUpdate(playerMove.xEnd, playerMove.yEnd, boardMatrix);
+//   let userPlayFrom = document.createElement("p");
+//   userPlayFrom.textContent = "At: ";
 
-    //   if (!moved) {
-    //     alert("Not a valid move, please try again.");
-    //   }
-//     }
-//   } else {
-//     alert("There is no piece on the board at that position. Please try again.");
-//   }
-//   playerMove.reset();
-//   resetPlayerData();
+//   let userPlayTo = document.createElement("p");
+//   userPlayTo.textContent = "To: ";
+
+//   data.appendChild(userPlayFrom);
+//   data.appendChild(userPlayTo);
 // }
 
-// function resetPlayerData() {
-//   userPlayFrom.textContent = "Move from: ";
-//   userPlayTo.textContent = "Move to: ";
-// }
-
-
-  export { getCoordinates, playerMove, resetPlayerData};
+export { getCoordinates, playerMove, resetPlayerData, handleMoveSubmit };
