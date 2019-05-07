@@ -1,4 +1,4 @@
-// import io from "socket.io-client";
+import io from "socket.io-client";
 
 import showGames from "./show-games.js";
 import handlePlayer2 from "./handle-player-2.js";
