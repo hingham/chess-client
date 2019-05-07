@@ -37,6 +37,7 @@ body > * {
   height: fit-content;
   margin: 0 2em;
   padding: 0.5em;
+  max-width: 18em;
 }
 
 #wait {  
@@ -44,6 +45,7 @@ body > * {
   height: fit-content;
   margin: 0 2em;
   padding: 0.5em;
+  max-width: 18em;
 }
 
 h2 {

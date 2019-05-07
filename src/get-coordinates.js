@@ -26,9 +26,18 @@ moveContainer.appendChild(userPlayTo);
 function handleMoveSubmit(dataHandler) {
   // create submit to submit the input and output
   let submit = document.createElement("button");
+  submit.setAttribute('type', 'submit');
   submit.textContent = "Submit Move";
   moveContainer.appendChild(submit);
   submit.addEventListener("click", dataHandler);
+}
+
+function handleReset(playerMove) {
+  // create rest to rest the playerMove
+  let submit = document.createElement("button");
+  submit.textContent = "Reset";
+  moveContainer.appendChild(submit);
+  submit.addEventListener("click", ()=>resetPlayerData() );
 }
 
 // returns the player object with the move values
@@ -36,6 +45,10 @@ function getCoordinates(e) {
   e.preventDefault();
   console.log("the target id: ", e.target.id.split(""));
   let coordinate = e.target.id.split("").map(val => parseInt(val, 10));
+  coordinate.filter(val=> val * 0 === 0);
+
+  if(coordinate.length < 2) return;
+
   let xLetter = String.fromCharCode(coordinate[0] + 96);
   let yNum = -1 * coordinate[1] + 9;
 
@@ -58,27 +71,7 @@ function appendTextNode(appendTo, row, col) {
 function resetPlayerData() {
   userPlayFrom.textContent = "At: ";
   userPlayTo.textContent = "To: ";
+  playerMove.reset();
 }
 
-// function renderPlayerTurnData() {
-//   let data = document.getElementById("player-data");
-//   data.innerHTML = "";
-//   let h3 = document.createElement("h3");
-//   h3.textContent = "Making a Move:";
-//   let p = document.createElement("p");
-//   p.textContent = `Click piece you want to move. Then, click where would like to move.
-// If the move is vaild, the board will be updated.`;
-//   data.appendChild(h3);
-//   data.appendChild(p);
-
-//   let userPlayFrom = document.createElement("p");
-//   userPlayFrom.textContent = "At: ";
-
-//   let userPlayTo = document.createElement("p");
-//   userPlayTo.textContent = "To: ";
-
-//   data.appendChild(userPlayFrom);
-//   data.appendChild(userPlayTo);
-// }
-
-export { getCoordinates, playerMove, resetPlayerData, handleMoveSubmit };
+export { getCoordinates, playerMove, resetPlayerData, handleMoveSubmit, handleReset };
