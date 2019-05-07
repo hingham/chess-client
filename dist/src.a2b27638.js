@@ -8742,18 +8742,21 @@ moveContainer.appendChild(userPlayTo);
 function handleMoveSubmit(dataHandler) {
   // create submit to submit the input and output
   // let form = document.createElement('form');
-  var submit = document.createElement("button");
-  submit.setAttribute('type', 'submit');
-  submit.textContent = "Submit Move";
+  var div = document.createElement('div');
   var label = document.createElement('label');
   label.textContent = 'Checkmate';
   var checkbox = document.createElement('input');
   checkbox.setAttribute('type', 'checkbox');
-  checkbox.setAttribute('value', 'Checkmake'); // checkbox.setAttribute('checked', '');
+  checkbox.setAttribute('value', 'Checkmake');
+  div.appendChild(label);
+  div.appendChild(checkbox);
+  var submit = document.createElement("button");
+  submit.setAttribute('type', 'submit');
+  submit.textContent = "Submit Move"; // moveContainer.appendChild(label);
+  // moveContainer.appendChild(checkbox);
 
-  moveContainer.appendChild(submit);
-  moveContainer.appendChild(label);
-  moveContainer.appendChild(checkbox); // moveContainer.appendChild(form);
+  moveContainer.appendChild(div);
+  moveContainer.appendChild(submit); // moveContainer.appendChild(form);
 
   submit.addEventListener("click", dataHandler);
 }
@@ -9228,7 +9231,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62411" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51448" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
