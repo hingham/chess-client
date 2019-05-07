@@ -25,10 +25,25 @@ moveContainer.appendChild(userPlayTo);
 
 function handleMoveSubmit(dataHandler) {
   // create submit to submit the input and output
+  // let form = document.createElement('form');
+
   let submit = document.createElement("button");
   submit.setAttribute('type', 'submit');
   submit.textContent = "Submit Move";
+  
+  let label = document.createElement('label');
+  label.textContent = 'Checkmate'
+  
+  let checkbox = document.createElement('input');
+  checkbox.setAttribute('type', 'checkbox');
+  checkbox.setAttribute('value', 'Checkmake');
+  // checkbox.setAttribute('checked', '');
+
   moveContainer.appendChild(submit);
+  moveContainer.appendChild(label);
+  moveContainer.appendChild(checkbox);
+  // moveContainer.appendChild(form);
+  
   submit.addEventListener("click", dataHandler);
 }
 

@@ -3,6 +3,9 @@ import io from "socket.io-client";
 import showGames from "./show-games.js";
 import handlePlayer2 from "./handle-player-2.js";
 import handleNewMove from "./handle-new-move.js";
+import showCanvasConfetti from "./canvas.js";
+import showCanvasLoose from "./canvas-loose.js";
+import rain from "./canvas-loose.js";
 
 (function() {
   console.log("iffe");
@@ -11,6 +14,9 @@ import handleNewMove from "./handle-new-move.js";
   let socket = io.connect("http://localhost:4000"),
     player,
     game;
+  // let socket = io.connect("https://chess-match-server.herokuapp.com/"),
+  //   player,
+  //   game;
 
   let boardContainer = document.querySelector("section");
 
@@ -41,10 +47,8 @@ import handleNewMove from "./handle-new-move.js";
     socket.emit("joinGame", { room: roomId, name: roomId });
   }
 
-  socket.on("removeGame", data => {
-    console.log('remove', data);
-    let game = document.getElementById(data.gameId);
-    game.remove();
+  socket.on("updateAvailableGames", data => {
+    showGames(data.games, handleJoinGame);
   });
 
   socket.on("player1", data => {
@@ -64,40 +68,7 @@ import handleNewMove from "./handle-new-move.js";
     heading.textContent = `${data.player1.toUpperCase()} vs ${data.player2.toUpperCase()}`;
     handleNewMove(data, socket);
 
-    // function handleNewMove(data, socket) {
-    //   let gameContainer = document.getElementById("enter-game");
-    //   let boardContainer = document.querySelector("section");
 
-    //   if (data.playerMove !== null) {
-    //     console.log("moving player", data.playerMove);
-    //     let { xStart, yStart, xEnd, yEnd } = data.playerMove;
-    //     let movedFrom = document.getElementById(`${xStart}${yStart}`);
-    //     let hex = movedFrom.innerHTML;
-    //     movedFrom.innerHTML = null;
-    //     let movedTo = document.getElementById(`${xEnd}${yEnd}`);
-    //     movedTo.innerHTML = hex;
-    //   } else {
-    //     newGame.remove();
-    //     gameContainer.remove();
-
-    //     drawBoard(data.board, boardContainer, getCoordinates);
-    //     handleMoveSubmit(submitMoveHandler);
-    //     handleReset();
-
-    //     function submitMoveHandler(e) {
-    //       if (playerMove.xEnd && playerMove.yEnd) {
-    //         socket.emit("playerMoved", {
-    //           playerMove: playerMove,
-    //           player1: data.player1,
-    //           player2: data.player2,
-    //           gameId: data.gameId
-    //         });
-    //         playerMove.reset();
-    //         // resetPlayerData();
-    //       }
-    //     }
-    //   }
-    // }
   });
 
   socket.on("wait", () => {
@@ -117,4 +88,14 @@ import handleNewMove from "./handle-new-move.js";
   socket.on("unvalidMove", message => {
     alert(message);
   });
+
+  socket.on('winner', ()=>{
+    showCanvasConfetti();
+    alert('you won!!!');
+  })
+
+  socket.on('loose', ()=>{
+    rain();
+    alert('you lost :(');
+  })
 })();

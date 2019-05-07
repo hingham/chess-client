@@ -8741,10 +8741,20 @@ moveContainer.appendChild(userPlayTo);
 
 function handleMoveSubmit(dataHandler) {
   // create submit to submit the input and output
+  // let form = document.createElement('form');
   var submit = document.createElement("button");
   submit.setAttribute('type', 'submit');
   submit.textContent = "Submit Move";
+  var label = document.createElement('label');
+  label.textContent = 'Checkmate';
+  var checkbox = document.createElement('input');
+  checkbox.setAttribute('type', 'checkbox');
+  checkbox.setAttribute('value', 'Checkmake'); // checkbox.setAttribute('checked', '');
+
   moveContainer.appendChild(submit);
+  moveContainer.appendChild(label);
+  moveContainer.appendChild(checkbox); // moveContainer.appendChild(form);
+
   submit.addEventListener("click", dataHandler);
 }
 
@@ -8869,13 +8879,19 @@ function handleNewMove(data, socket) {
     var movedTo = document.getElementById("".concat(xEnd).concat(yEnd));
     movedTo.innerHTML = hex;
   } else {
+    //we need to check the status of the checkbox
     var submitMoveHandler = function submitMoveHandler(e) {
+      var checkmate = document.querySelector("input");
+      checkmate = checkmate.checked;
+      console.log('checkmate bool', checkmate);
+
       if (_getCoordinates.playerMove.xEnd && _getCoordinates.playerMove.yEnd) {
         socket.emit("playerMoved", {
           playerMove: _getCoordinates.playerMove,
           player1: data.player1,
           player2: data.player2,
-          gameId: data.gameId
+          gameId: data.gameId,
+          checkmate: checkmate
         });
 
         _getCoordinates.playerMove.reset();
@@ -8885,7 +8901,8 @@ function handleNewMove(data, socket) {
     };
 
     gameContainer.remove();
-    (0, _drawBoard.default)(data.board, boardContainer, _getCoordinates.getCoordinates);
+    (0, _drawBoard.default)(data.board, boardContainer, _getCoordinates.getCoordinates); //this renders the buttons we need to click
+
     (0, _getCoordinates.handleMoveSubmit)(submitMoveHandler);
     (0, _getCoordinates.handleReset)();
   }
@@ -8893,7 +8910,188 @@ function handleNewMove(data, socket) {
 
 var _default = handleNewMove;
 exports.default = _default;
-},{"./get-coordinates.js":"src/get-coordinates.js","./draw-board.js":"src/draw-board.js"}],"src/game-app.js":[function(require,module,exports) {
+},{"./get-coordinates.js":"src/get-coordinates.js","./draw-board.js":"src/draw-board.js"}],"src/canvas.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = showCanvasConfetti;
+
+function showCanvasConfetti() {
+  var canvas = document.createElement("canvas");
+  canvas.setAttribute("id", "confetti");
+  var container = document.querySelector("div");
+  container.innerHTML = "";
+  container.appendChild(canvas);
+  var ctx = canvas.getContext("2d");
+  var startTime = new Date().getTime();
+  var currentTime = startTime;
+  var width, height;
+  var items = [];
+  var colors = ["#3788c7", "#f298be", "#f6e25b", "#8a5bac", "#00a944", "#ec2a28", "#43c4c0", "#f4b92f"];
+  var index = 150;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+
+  function particle(x, y, i, minv) {
+    var angle = Math.random() * (Math.PI * 2);
+    var amount = Math.random() * 15.0 + minv;
+    var vx = Math.sin(angle) * amount;
+    var vy = Math.cos(angle) * amount;
+    return {
+      x: x,
+      y: y,
+      vx: vx,
+      vy: vy,
+      width: Math.random() * 15 + 8,
+      height: Math.random() * 20 + 8,
+      color: colors[i % colors.length],
+      circle: Math.random() > 0.8,
+      rotate: Math.random() * 180,
+      direction: Math.random() * 5 - 2.5,
+      fallSpeed: Math.random() / 10 + 0.1
+    };
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+    var time = new Date().getTime();
+    var delta = (time - currentTime) / (1000 / 60);
+    currentTime = time;
+
+    if (time - startTime > 1500) {
+      items[++index % 600] = particle(Math.random() * width, -20, index, 10);
+    }
+
+    items.forEach(function (item) {
+      item.vx *= 1.0 - 0.05 * delta;
+      item.vy += delta * item.fallSpeed;
+      item.vy /= 1.0 + 0.05 * delta;
+      item.x += delta * item.vx;
+      item.y += delta * item.vy;
+      item.rotate += delta * item.direction;
+      ctx.fillStyle = item.color;
+
+      if (item.circle) {
+        ctx.beginPath();
+        ctx.arc(item.x, item.y, item.width / 2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
+      } else {
+        ctx.save();
+        ctx.beginPath();
+        ctx.translate(item.x, item.y);
+        ctx.rotate(item.rotate * Math.PI / 180);
+        ctx.fillRect(-item.width / 2, -item.height / 2, item.width, item.height);
+        ctx.translate(-item.x, -item.y);
+        ctx.restore();
+        ctx.closePath();
+      }
+    });
+    window.requestAnimationFrame(render);
+  }
+
+  resize();
+
+  for (var i = 0; i < index; i++) {
+    items[i] = particle(width / 2, height / 2, i, 10);
+  }
+
+  window.onclick = function (e) {
+    for (var i = 0; i < 150; i++) {
+      items[(index + 150 + i) % 600] = particle(e.clientX, e.clientY, i, 10);
+    }
+
+    index = (index + 150) % 600;
+  };
+
+  window.ontouchstart = function (e) {
+    for (var d = 0; d < e.changedTouches.length; d++) {
+      for (var i = 0; i < 150; i++) {
+        items[(index + 150 + i) % 600] = particle(e.changedTouches[d].pageX, e.changedTouches[d].pageY, i, 10);
+      }
+
+      index = (index + 150) % 600;
+    }
+  };
+
+  window.onresize = resize;
+  render();
+}
+},{}],"src/canvas-loose.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = rain;
+
+function rain() {
+  var canvas = document.createElement("canvas");
+  var container = document.querySelector("div");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  container.innerHTML = "";
+  container.appendChild(canvas);
+  var ctx = canvas.getContext("2d");
+  var w = canvas.width;
+  var h = canvas.height;
+  ctx.strokeStyle = "rgba(60,130,280,0.9)";
+  ctx.lineWidth = 1;
+  ctx.lineCap = "round";
+  var init = [];
+  var maxParts = 1000;
+
+  for (var a = 0; a < maxParts; a++) {
+    init.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      l: Math.random() * 1,
+      xs: -4 + Math.random() * 4 + 2,
+      ys: Math.random() * 10 + 10
+    });
+  }
+
+  var particles = [];
+
+  for (var b = 0; b < maxParts; b++) {
+    particles[b] = init[b];
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+
+    for (var c = 0; c < particles.length; c++) {
+      var p = particles[c];
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + p.l * p.xs, p.y + p.l * p.ys);
+      ctx.stroke();
+    }
+
+    move();
+  }
+
+  function move() {
+    for (var b = 0; b < particles.length; b++) {
+      var p = particles[b];
+      p.x += p.xs;
+      p.y += p.ys;
+
+      if (p.x > w || p.y > h) {
+        p.x = Math.random() * w;
+        p.y = -20;
+      }
+    }
+  }
+
+  setInterval(draw, 50);
+}
+},{}],"src/game-app.js":[function(require,module,exports) {
 "use strict";
 
 var _socket = _interopRequireDefault(require("socket.io-client"));
@@ -8904,6 +9102,10 @@ var _handlePlayer = _interopRequireDefault(require("./handle-player-2.js"));
 
 var _handleNewMove = _interopRequireDefault(require("./handle-new-move.js"));
 
+var _canvas = _interopRequireDefault(require("./canvas.js"));
+
+var _canvasLoose = _interopRequireDefault(require("./canvas-loose.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (function () {
@@ -8912,7 +9114,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
   var socket = _socket.default.connect("http://localhost:4000"),
       player,
-      game;
+      game; // let socket = io.connect("https://chess-match-server.herokuapp.com/"),
+  //   player,
+  //   game;
+
 
   var boardContainer = document.querySelector("section");
   var newGame = document.getElementById("new-game");
@@ -8948,10 +9153,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     });
   }
 
-  socket.on("removeGame", function (data) {
-    console.log('remove', data);
-    var game = document.getElementById(data.gameId);
-    game.remove();
+  socket.on("updateAvailableGames", function (data) {
+    (0, _showGames.default)(data.games, handleJoinGame);
   });
   socket.on("player1", function (data) {
     console.log("player 1 screen");
@@ -8965,37 +9168,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   socket.on("drawBoard", function (data) {
     var heading = document.querySelector("h2");
     heading.textContent = "".concat(data.player1.toUpperCase(), " vs ").concat(data.player2.toUpperCase());
-    (0, _handleNewMove.default)(data, socket); // function handleNewMove(data, socket) {
-    //   let gameContainer = document.getElementById("enter-game");
-    //   let boardContainer = document.querySelector("section");
-    //   if (data.playerMove !== null) {
-    //     console.log("moving player", data.playerMove);
-    //     let { xStart, yStart, xEnd, yEnd } = data.playerMove;
-    //     let movedFrom = document.getElementById(`${xStart}${yStart}`);
-    //     let hex = movedFrom.innerHTML;
-    //     movedFrom.innerHTML = null;
-    //     let movedTo = document.getElementById(`${xEnd}${yEnd}`);
-    //     movedTo.innerHTML = hex;
-    //   } else {
-    //     newGame.remove();
-    //     gameContainer.remove();
-    //     drawBoard(data.board, boardContainer, getCoordinates);
-    //     handleMoveSubmit(submitMoveHandler);
-    //     handleReset();
-    //     function submitMoveHandler(e) {
-    //       if (playerMove.xEnd && playerMove.yEnd) {
-    //         socket.emit("playerMoved", {
-    //           playerMove: playerMove,
-    //           player1: data.player1,
-    //           player2: data.player2,
-    //           gameId: data.gameId
-    //         });
-    //         playerMove.reset();
-    //         // resetPlayerData();
-    //       }
-    //     }
-    //   }
-    // }
+    (0, _handleNewMove.default)(data, socket);
   });
   socket.on("wait", function () {
     var data = document.getElementById("player-move");
@@ -9012,8 +9185,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   socket.on("unvalidMove", function (message) {
     alert(message);
   });
+  socket.on('winner', function () {
+    (0, _canvas.default)();
+    alert('you won!!!');
+  });
+  socket.on('loose', function () {
+    (0, _canvasLoose.default)();
+    alert('you lost :(');
+  });
 })();
-},{"socket.io-client":"node_modules/socket.io-client/lib/index.js","./show-games.js":"src/show-games.js","./handle-player-2.js":"src/handle-player-2.js","./handle-new-move.js":"src/handle-new-move.js"}],"src/index.js":[function(require,module,exports) {
+},{"socket.io-client":"node_modules/socket.io-client/lib/index.js","./show-games.js":"src/show-games.js","./handle-player-2.js":"src/handle-player-2.js","./handle-new-move.js":"src/handle-new-move.js","./canvas.js":"src/canvas.js","./canvas-loose.js":"src/canvas-loose.js"}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
 require("./styles.css");
@@ -9047,7 +9228,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49840" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62411" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -27,16 +27,24 @@ function handleNewMove(data, socket) {
     gameContainer.remove();
 
     drawBoard(data.board, boardContainer, getCoordinates);
+
+    //this renders the buttons we need to click
     handleMoveSubmit(submitMoveHandler);
     handleReset();
+    //we need to check the status of the checkbox
 
     function submitMoveHandler(e) {
+      let checkmate = document.querySelector("input");
+      checkmate = checkmate.checked;
+      console.log('checkmate bool', checkmate);
+
       if (playerMove.xEnd && playerMove.yEnd) {
         socket.emit("playerMoved", {
           playerMove: playerMove,
           player1: data.player1,
           player2: data.player2,
-          gameId: data.gameId
+          gameId: data.gameId,
+          checkmate: checkmate
         });
         playerMove.reset();
         resetPlayerData();
