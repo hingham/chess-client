@@ -5,32 +5,38 @@
     <link rel="stylesheet" href="/styles.dd855970.css">
     <meta charset="UTF-8">
   <script src="/styles.dd855970.js"></script><link rel="stylesheet" href="/src.a2b27638.css"></head>
-
   <body>
     <main>
-      <h1>Chessboard</h1>
-      <h2>DOM Manipulation Vanilla JS</h2>
+      <h1>Chess Match</h1>
+      <h2></h2>
       <div id="app">
         <section id="chessboard"></section>
         <section id="player-data">
-			
           <div id="enter-game">
             <form>
-              <label name="name1">player name</label>
+              <label name="name1">Enter you name to start a new game:</label>
               <input id="player-1-name" placeholder="name1">
               <button type="submit" id="new-game">Start New Game</button>
             </form>
 
             <section id="game-container">
-              <h4>Join a existing game</h4>
             </section>
           </div>
 
-          <h3>Player Move</h3>
-          <p>
-            Click piece you want to move. Then, click where would like to move.
-            If the move is vaild, the board will be updated.
-          </p>
+
+          <section id="player-move" class="hidden">
+            <h3>Player Move</h3>
+            <p>
+              Click piece you want to move. Then, click where would like to
+              move. If the move is vaild, the board will be updated.
+            </p>
+          </section>
+
+          <section id="wait" class="hidden">
+            <h3>Please wait</h3>
+            <p>Waiting for your opponent to make their move</p>
+          </section>
+
         </section>
       </div>
     </main>

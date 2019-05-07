@@ -9,10 +9,13 @@ export default function(boardMatrix, boardContainer, eventCallback) {
       if (boardMatrix[i][j] && boardMatrix[i][j].hex) {
         square.innerHTML = boardMatrix[i][j].hex;
       }
-      if (i === 0 || j === 0) {
-        square.setAttribute("class", "grid");
+      if (i === 0) {
         square.innerHTML = boardMatrix[i][j];
-      } else if (i % 2 === 0) {
+      }else if (j===0){
+        square.innerHTML = -1 * boardMatrix[i][j] + 9;
+
+      } 
+      else if (i % 2 === 0) {
         j % 2 === 0
           ? square.setAttribute("class", "black")
           : square.setAttribute("class", "salmon");
@@ -22,8 +25,9 @@ export default function(boardMatrix, boardContainer, eventCallback) {
           : square.setAttribute("class", "black");
       }
       row.appendChild(square);
-      square.addEventListener("click", eventCallback);
     }
+    document.getElementById('player-move').setAttribute('class', '');
     boardContainer.appendChild(row);
+    boardContainer.addEventListener("click", eventCallback);
   }
 }

@@ -189,773 +189,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"src/models/chess-pieces.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ChessPieces = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var ChessPieces =
-/*#__PURE__*/
-function () {
-  function ChessPieces(hex, xPos, yPos) {
-    _classCallCheck(this, ChessPieces);
-
-    this.hex = hex;
-    this.xPos = xPos;
-    this.yPos = yPos;
-    this.validMoves = null;
-  } //sub classes should implement checkAndUpdate
-
-
-  _createClass(ChessPieces, [{
-    key: "checkAndUpdate",
-    value: function checkAndUpdate() {
-      console.log("sub class must implement checkAndUpdate function");
-      return false;
-    } //sub classes should implement
-
-  }, {
-    key: "findMoves",
-    value: function findMoves() {
-      console.log("sub class must implement findMoves function");
-    }
-  }, {
-    key: "changePosition",
-    value: function changePosition(x1, y1, x2, y2, matrix) {
-      var temp = matrix[y1][x1];
-      console.log("temp");
-      matrix[y1][x1] = null;
-      matrix[y2][x2] = temp;
-      var movedFrom = document.getElementById("".concat(x1).concat(y1));
-      movedFrom.innerHTML = matrix[y1][x1];
-      var movedTo = document.getElementById("".concat(x2).concat(y2));
-      movedTo.innerHTML = matrix[y2][x2].hex;
-      console.log("place it is moving", matrix[y2][x2]);
-    } //check if the move exists in the possible move object
-
-  }, {
-    key: "checkAndMove",
-    value: function checkAndMove(x2, y2, matrix) {
-      if (this.validMoves.hasOwnProperty(x2)) {
-        var yArr = this.validMoves[x2];
-        console.log("valid x");
-
-        if (yArr.indexOf(parseInt(y2)) >= 0) {
-          console.log("valid x and y");
-          this.changePosition(this.xPos, this.yPos, x2, y2, matrix);
-          this.updatePos(x2, y2);
-          return true;
-        }
-      }
-
-      console.log("not valid move");
-      return false;
-    } //update the nodes position on the board
-
-  }, {
-    key: "updatePos",
-    value: function updatePos(x2, y2) {
-      this.xPos = parseInt(x2, 10);
-      this.yPos = parseInt(y2, 10);
-      console.log("new position ", this.xPos, this.yPos);
-    }
-  }]);
-
-  return ChessPieces;
-}();
-
-exports.ChessPieces = ChessPieces;
-},{}],"src/models/knight.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.darkKnight2 = exports.darkKnight1 = exports.lightKnight2 = exports.lightKnight1 = void 0;
-
-var _chessPieces = require("./chess-pieces.js");
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var Knight =
-/*#__PURE__*/
-function (_ChessPieces) {
-  _inherits(Knight, _ChessPieces);
-
-  function Knight(hex, xPos, yPos) {
-    var _this;
-
-    _classCallCheck(this, Knight);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Knight).call(this, hex, xPos, yPos));
-    _this.validMoves = Knight.findMoves(_this.xPos, _this.yPos);
-    return _this;
-  }
-
-  _createClass(Knight, [{
-    key: "checkAndUpdate",
-    value: function checkAndUpdate(x2, y2, matrix) {
-      console.log("checking for valid move");
-
-      if (this.checkAndMove(x2, y2, matrix)) {
-        this.validMoves = Knight.findMoves(this.xPos, this.yPos);
-        return true;
-      }
-
-      return false;
-    } //find all possible moves for the knight
-
-  }], [{
-    key: "findMoves",
-    value: function findMoves(x, y) {
-      console.log("finding valid knight moves");
-      var positions = {};
-
-      if (x + 1 <= 8) {
-        positions[x + 1] = [y + 2, y - 2].filter(function (val) {
-          return val > 0 && val <= 8;
-        });
-      }
-
-      if (x - 1 > 0) {
-        positions[x - 1] = [y + 2, y - 2].filter(function (val) {
-          return val > 0 && val <= 8;
-        });
-      }
-
-      if (x + 2 <= 8) {
-        positions[x + 2] = [y + 1, y - 1].filter(function (val) {
-          return val > 0 && val <= 8;
-        });
-      }
-
-      if (x - 2 > 0) {
-        positions[x - 2] = [y + 1, y - 1].filter(function (val) {
-          return val > 0 && val <= 8;
-        });
-      }
-
-      return positions;
-    }
-  }]);
-
-  return Knight;
-}(_chessPieces.ChessPieces);
-
-var lightKnight1 = new Knight("&#9816;", 2, 1);
-exports.lightKnight1 = lightKnight1;
-var lightKnight2 = new Knight("&#9816;", 7, 1);
-exports.lightKnight2 = lightKnight2;
-var darkKnight1 = new Knight("&#9822;", 2, 8);
-exports.darkKnight1 = darkKnight1;
-var darkKnight2 = new Knight("&#9822;", 7, 8);
-exports.darkKnight2 = darkKnight2;
-},{"./chess-pieces.js":"src/models/chess-pieces.js"}],"src/models/pawns.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.darkPawn8 = exports.darkPawn7 = exports.darkPawn6 = exports.darkPawn5 = exports.darkPawn4 = exports.darkPawn3 = exports.darkPawn2 = exports.darkPawn1 = exports.lightPawn8 = exports.lightPawn7 = exports.lightPawn6 = exports.lightPawn5 = exports.lightPawn4 = exports.lightPawn3 = exports.lightPawn2 = exports.lightPawn1 = void 0;
-
-var _chessPieces = require("./chess-pieces.js");
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var LightPawn =
-/*#__PURE__*/
-function (_ChessPieces) {
-  _inherits(LightPawn, _ChessPieces);
-
-  function LightPawn(hex, xPos, yPos) {
-    var _this;
-
-    _classCallCheck(this, LightPawn);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(LightPawn).call(this, hex, xPos, yPos));
-    _this.validMoves = LightPawn.findMoves(xPos, yPos);
-
-    _this.validMoves[xPos].push(yPos + 2);
-
-    return _this;
-  }
-
-  _createClass(LightPawn, [{
-    key: "checkAndUpdate",
-    value: function checkAndUpdate(x2, y2, matrix) {
-      console.log("checking for valid move");
-
-      if (this.checkAndMove(x2, y2, matrix)) {
-        this.validMoves = LightPawn.findMoves(this.xPos, this.yPos);
-        return true;
-      }
-
-      return false;
-    }
-  }], [{
-    key: "findMoves",
-    value: function findMoves(x, y) {
-      var positions = {};
-
-      if (y + 1 <= 8) {
-        positions[x] = [y + 1];
-      }
-
-      return positions;
-    }
-  }]);
-
-  return LightPawn;
-}(_chessPieces.ChessPieces);
-
-var DarkPawn =
-/*#__PURE__*/
-function (_ChessPieces2) {
-  _inherits(DarkPawn, _ChessPieces2);
-
-  function DarkPawn(hex, xPos, yPos) {
-    var _this2;
-
-    _classCallCheck(this, DarkPawn);
-
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(DarkPawn).call(this, hex, xPos, yPos));
-    _this2.validMoves = DarkPawn.findMoves(xPos, yPos);
-
-    _this2.validMoves[xPos].push(yPos - 2);
-
-    return _this2;
-  }
-
-  _createClass(DarkPawn, [{
-    key: "checkAndUpdate",
-    value: function checkAndUpdate(x2, y2, matrix) {
-      console.log("checking for valid move");
-
-      if (this.checkAndMove(x2, y2, matrix)) {
-        this.validMoves = DarkPawn.findMoves(this.xPos, this.yPos);
-        return true;
-      }
-
-      return false;
-    }
-  }], [{
-    key: "findMoves",
-    value: function findMoves(x, y) {
-      var positions = {};
-
-      if (y - 1 >= 1) {
-        positions[x] = [y - 1];
-      }
-
-      return positions;
-    }
-  }]);
-
-  return DarkPawn;
-}(_chessPieces.ChessPieces);
-
-var lightPawn1 = new LightPawn("&#9817;", 1, 2);
-exports.lightPawn1 = lightPawn1;
-var lightPawn2 = new LightPawn("&#9817;", 2, 2);
-exports.lightPawn2 = lightPawn2;
-var lightPawn3 = new LightPawn("&#9817;", 3, 2);
-exports.lightPawn3 = lightPawn3;
-var lightPawn4 = new LightPawn("&#9817;", 4, 2);
-exports.lightPawn4 = lightPawn4;
-var lightPawn5 = new LightPawn("&#9817;", 5, 2);
-exports.lightPawn5 = lightPawn5;
-var lightPawn6 = new LightPawn("&#9817;", 6, 2);
-exports.lightPawn6 = lightPawn6;
-var lightPawn7 = new LightPawn("&#9817;", 7, 2);
-exports.lightPawn7 = lightPawn7;
-var lightPawn8 = new LightPawn("&#9817;", 8, 2);
-exports.lightPawn8 = lightPawn8;
-var darkPawn1 = new DarkPawn("&#9823;", 1, 7);
-exports.darkPawn1 = darkPawn1;
-var darkPawn2 = new DarkPawn("&#9823;", 2, 7);
-exports.darkPawn2 = darkPawn2;
-var darkPawn3 = new DarkPawn("&#9823;", 3, 7);
-exports.darkPawn3 = darkPawn3;
-var darkPawn4 = new DarkPawn("&#9823;", 4, 7);
-exports.darkPawn4 = darkPawn4;
-var darkPawn5 = new DarkPawn("&#9823;", 5, 7);
-exports.darkPawn5 = darkPawn5;
-var darkPawn6 = new DarkPawn("&#9823;", 6, 7);
-exports.darkPawn6 = darkPawn6;
-var darkPawn7 = new DarkPawn("&#9823;", 7, 7);
-exports.darkPawn7 = darkPawn7;
-var darkPawn8 = new DarkPawn("&#9823;", 8, 7);
-exports.darkPawn8 = darkPawn8;
-},{"./chess-pieces.js":"src/models/chess-pieces.js"}],"src/models/rook.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.darkRook2 = exports.darkRook1 = exports.lightRook2 = exports.lightRook1 = void 0;
-
-var _chessPieces = require("./chess-pieces.js");
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var Rook =
-/*#__PURE__*/
-function (_ChessPieces) {
-  _inherits(Rook, _ChessPieces);
-
-  function Rook(hex, xPos, yPos) {
-    var _this;
-
-    _classCallCheck(this, Rook);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Rook).call(this, hex, xPos, yPos));
-    _this.validMoves = Rook.findMoves(xPos, yPos);
-    return _this;
-  }
-
-  _createClass(Rook, [{
-    key: "checkAndUpdate",
-    value: function checkAndUpdate(x2, y2, matrix) {
-      console.log("checking for valid move");
-
-      if (this.checkAndMove(x2, y2, matrix)) {
-        this.validMoves = Rook.findMoves(this.xPos, this.yPos);
-        return true;
-      }
-
-      return false;
-    }
-  }], [{
-    key: "findMoves",
-    value: function findMoves(x, y) {
-      var positions = {};
-      positions[x] = [1, 2, 3, 4, 5, 6, 7, 8].filter(function (val) {
-        return val !== y;
-      });
-
-      for (var i = 1; i <= 8; i++) {
-        if (x !== i) {
-          positions[i] = [y];
-        }
-      }
-
-      return positions;
-    }
-  }]);
-
-  return Rook;
-}(_chessPieces.ChessPieces);
-
-var lightRook1 = new Rook("&#9814;", 1, 1);
-exports.lightRook1 = lightRook1;
-var lightRook2 = new Rook("&#9814;", 8, 1);
-exports.lightRook2 = lightRook2;
-var darkRook1 = new Rook("&#9820;", 1, 8);
-exports.darkRook1 = darkRook1;
-var darkRook2 = new Rook("&#9820;", 8, 8);
-exports.darkRook2 = darkRook2;
-},{"./chess-pieces.js":"src/models/chess-pieces.js"}],"src/models/bishop.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.darkBishop2 = exports.darkBishop1 = exports.lightBishop2 = exports.lightBishop1 = void 0;
-
-var _chessPieces = require("./chess-pieces.js");
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var Bishop =
-/*#__PURE__*/
-function (_ChessPieces) {
-  _inherits(Bishop, _ChessPieces);
-
-  function Bishop(hex, xPos, yPos) {
-    var _this;
-
-    _classCallCheck(this, Bishop);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Bishop).call(this, hex, xPos, yPos));
-    _this.validMoves = Bishop.findMoves(xPos, yPos);
-    return _this;
-  }
-
-  _createClass(Bishop, [{
-    key: "checkAndUpdate",
-    value: function checkAndUpdate(x2, y2, matrix) {
-      console.log("checking for valid move");
-
-      if (this.checkAndMove(x2, y2, matrix)) {
-        this.validMoves = Bishop.findMoves(this.xPos, this.yPos);
-        return true;
-      }
-
-      return false;
-    }
-  }], [{
-    key: "findMoves",
-    value: function findMoves(x, y) {
-      var positions = {};
-
-      for (var i = 0; i < 8; i++) {
-        if (x + i !== x && x + i <= 8 && y + i <= 8) {
-          positions[x + i] = [y + i];
-        }
-
-        if (x + i !== x && x + i <= 8 && y - i > 0) {
-          positions[x + i] = [y - i];
-        }
-
-        if (x - i !== x && x - i > 0 && y + i <= 8) {
-          positions[x - i] = [y + i];
-        }
-
-        if (x - i !== x && x - i > 0 && y - i > 0) {
-          positions[x - i] = [y - i];
-        }
-      }
-
-      return positions;
-    }
-  }]);
-
-  return Bishop;
-}(_chessPieces.ChessPieces);
-
-var lightBishop1 = new Bishop("&#9815;", 3, 1);
-exports.lightBishop1 = lightBishop1;
-var lightBishop2 = new Bishop("&#9815;", 6, 1);
-exports.lightBishop2 = lightBishop2;
-var darkBishop1 = new Bishop("&#9821;", 3, 8);
-exports.darkBishop1 = darkBishop1;
-var darkBishop2 = new Bishop("&#9821;", 6, 8);
-exports.darkBishop2 = darkBishop2;
-},{"./chess-pieces.js":"src/models/chess-pieces.js"}],"src/models/king.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.darkKing = exports.lightKing = void 0;
-
-var _chessPieces = require("./chess-pieces.js");
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var King =
-/*#__PURE__*/
-function (_ChessPieces) {
-  _inherits(King, _ChessPieces);
-
-  function King(hex, xPos, yPos) {
-    var _this;
-
-    _classCallCheck(this, King);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(King).call(this, hex, xPos, yPos));
-    _this.validMoves = King.findMoves(xPos, yPos);
-    return _this;
-  }
-
-  _createClass(King, [{
-    key: "checkAndUpdate",
-    value: function checkAndUpdate(x2, y2, matrix) {
-      console.log("checking for valid move");
-
-      if (this.checkAndMove(x2, y2, matrix)) {
-        this.validMoves = King.findMoves(this.xPos, this.yPos);
-        return true;
-      }
-
-      return false;
-    }
-  }], [{
-    key: "findMoves",
-    value: function findMoves(x, y) {
-      var positions = {};
-      positions[x] = [y + 1, y - 1].filter(function (val) {
-        return val > 0 && val <= 8;
-      });
-
-      if (x + 1 <= 8) {
-        //sideways, sidways and up
-        positions[x + 1] = [y - 1, y, y + 1].filter(function (val) {
-          return val > 0 && val <= 8;
-        });
-      }
-
-      if (x - 1 <= 8) {
-        positions[x - 1] = [y - 1, y, y + 1].filter(function (val) {
-          return val > 0 && val <= 8;
-        });
-      }
-
-      return positions;
-    }
-  }]);
-
-  return King;
-}(_chessPieces.ChessPieces);
-
-var lightKing = new King("&#9813;", 5, 1);
-exports.lightKing = lightKing;
-var darkKing = new King("&#9819;", 4, 8);
-exports.darkKing = darkKing;
-},{"./chess-pieces.js":"src/models/chess-pieces.js"}],"src/models/queen.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.darkQueen = exports.lightQueen = void 0;
-
-var _chessPieces = require("./chess-pieces.js");
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var Queen =
-/*#__PURE__*/
-function (_ChessPieces) {
-  _inherits(Queen, _ChessPieces);
-
-  function Queen(hex, xPos, yPos) {
-    var _this;
-
-    _classCallCheck(this, Queen);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Queen).call(this, hex, xPos, yPos));
-    _this.validMoves = Queen.findMoves(xPos, yPos);
-    return _this;
-  }
-
-  _createClass(Queen, [{
-    key: "checkAndUpdate",
-    value: function checkAndUpdate(x2, y2, matrix) {
-      console.log("checking for valid move");
-
-      if (this.checkAndMove(x2, y2, matrix)) {
-        this.validMoves = Queen.findMoves(this.xPos, this.yPos);
-        return true;
-      }
-
-      return false;
-    }
-  }], [{
-    key: "findMoves",
-    value: function findMoves(x, y) {
-      var positions = {}; //can move move like rook
-
-      positions[x] = [1, 2, 3, 4, 5, 6, 7, 8].filter(function (val) {
-        return val !== y;
-      });
-
-      for (var i = 1; i <= 8; i++) {
-        if (x !== i) {
-          positions[i] = [y];
-        }
-      }
-
-      for (var _i = 0; _i < 8; _i++) {
-        if (x + _i !== x && x + _i <= 8 && y + _i <= 8) {
-          positions[x + _i] = [y + _i];
-        }
-
-        if (x + _i !== x && x + _i <= 8 && y - _i > 0) {
-          positions[x + _i] = [y - _i];
-        }
-
-        if (x - _i !== x && x - _i > 0 && y + _i <= 8) {
-          positions[x - _i] = [y + _i];
-        }
-
-        if (x - _i !== x && x - _i > 0 && y - _i > 0) {
-          positions[x - _i] = [y - _i];
-        }
-      }
-
-      return positions;
-    }
-  }]);
-
-  return Queen;
-}(_chessPieces.ChessPieces);
-
-var lightQueen = new Queen("&#9812;", 4, 1);
-exports.lightQueen = lightQueen;
-var darkQueen = new Queen("&#9818", 5, 8);
-exports.darkQueen = darkQueen;
-},{"./chess-pieces.js":"src/models/chess-pieces.js"}],"src/board.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _knight = require("./models/knight.js");
-
-var p = _interopRequireWildcard(require("./models/pawns.js"));
-
-var r = _interopRequireWildcard(require("./models/rook.js"));
-
-var b = _interopRequireWildcard(require("./models/bishop.js"));
-
-var k = _interopRequireWildcard(require("./models/king.js"));
-
-var q = _interopRequireWildcard(require("./models/queen.js"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-var _default = [[null, 1, 2, 3, 4, 5, 6, 7, 8], [1, r.lightRook1, _knight.lightKnight1, b.lightBishop1, q.lightQueen, k.lightKing, b.lightBishop2, _knight.lightKnight2, r.lightRook2], [2, p.lightPawn1, p.lightPawn2, p.lightPawn3, p.lightPawn4, p.lightPawn5, p.lightPawn6, p.lightPawn7, p.lightPawn8], [3, null, null, null, null, null, null, null, null], [4, null, null, null, null, null, null, null, null], [5, null, null, null, null, null, null, null, null], [6, null, null, null, null, null, null, null, null], [7, p.darkPawn1, p.darkPawn2, p.darkPawn3, p.darkPawn4, p.darkPawn5, p.darkPawn6, p.darkPawn7, p.darkPawn8], [8, r.darkRook1, _knight.darkKnight1, b.darkBishop1, k.darkKing, q.darkQueen, b.darkBishop2, _knight.darkKnight2, r.darkRook2]];
-exports.default = _default;
-},{"./models/knight.js":"src/models/knight.js","./models/pawns.js":"src/models/pawns.js","./models/rook.js":"src/models/rook.js","./models/bishop.js":"src/models/bishop.js","./models/king.js":"src/models/king.js","./models/queen.js":"src/models/queen.js"}],"node_modules/parcel-bundler/src/builtins/_empty.js":[function(require,module,exports) {
-
-},{}],"src/draw-board.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-
-function _default(boardMatrix, boardContainer, eventCallback) {
-  console.log('draw board');
-
-  for (var i = 0; i < boardMatrix.length; i++) {
-    var row = document.createElement("div");
-    row.setAttribute("class", "rowContainer");
-
-    for (var j = 0; j < boardMatrix[i].length; j++) {
-      var square = document.createElement("span");
-      square.setAttribute("id", "".concat(j).concat(i));
-
-      if (boardMatrix[i][j] && boardMatrix[i][j].hex) {
-        square.innerHTML = boardMatrix[i][j].hex;
-      }
-
-      if (i === 0 || j === 0) {
-        square.setAttribute("class", "grid");
-        square.innerHTML = boardMatrix[i][j];
-      } else if (i % 2 === 0) {
-        j % 2 === 0 ? square.setAttribute("class", "black") : square.setAttribute("class", "salmon");
-      } else {
-        j % 2 === 0 ? square.setAttribute("class", "salmon") : square.setAttribute("class", "black");
-      }
-
-      row.appendChild(square);
-      square.addEventListener("click", eventCallback);
-    }
-
-    boardContainer.appendChild(row);
-  }
-}
-},{}],"node_modules/parseuri/index.js":[function(require,module,exports) {
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parseuri/index.js":[function(require,module,exports) {
 /**
  * Parses an URI
  *
@@ -7009,7 +6243,9 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
   }
 };
 
-},{"./polling":"node_modules/engine.io-client/lib/transports/polling.js","component-inherit":"node_modules/component-inherit/index.js"}],"node_modules/engine.io-client/lib/transports/websocket.js":[function(require,module,exports) {
+},{"./polling":"node_modules/engine.io-client/lib/transports/polling.js","component-inherit":"node_modules/component-inherit/index.js"}],"node_modules/parcel-bundler/src/builtins/_empty.js":[function(require,module,exports) {
+
+},{}],"node_modules/engine.io-client/lib/transports/websocket.js":[function(require,module,exports) {
 var Buffer = require("buffer").Buffer;
 /**
  * Module dependencies.
@@ -9395,7 +8631,82 @@ exports.connect = lookup;
 exports.Manager = require('./manager');
 exports.Socket = require('./socket');
 
-},{"./url":"node_modules/socket.io-client/lib/url.js","socket.io-parser":"node_modules/socket.io-parser/index.js","./manager":"node_modules/socket.io-client/lib/manager.js","debug":"node_modules/debug/src/browser.js","./socket":"node_modules/socket.io-client/lib/socket.js"}],"src/get-coordinates.js":[function(require,module,exports) {
+},{"./url":"node_modules/socket.io-client/lib/url.js","socket.io-parser":"node_modules/socket.io-parser/index.js","./manager":"node_modules/socket.io-client/lib/manager.js","debug":"node_modules/debug/src/browser.js","./socket":"node_modules/socket.io-client/lib/socket.js"}],"src/show-games.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function showGames(games, eventListener) {
+  var joinGame = document.getElementById("game-container");
+  console.log("show games", games);
+  joinGame.innerHTML = "";
+
+  if (Object.keys(games).length > 0) {
+    var heading = document.createElement("h4");
+    heading.textContent = "Join a existing game: ";
+    joinGame.appendChild(heading);
+
+    for (var game in games) {
+      var gameId = document.createElement("p");
+      gameId.setAttribute("id", game);
+      gameId.textContent = "".concat(game[0].toUpperCase()).concat(game.slice(1), "'s game!");
+      gameId.addEventListener("click", eventListener);
+      joinGame.appendChild(gameId);
+    }
+  }
+}
+
+var _default = showGames;
+exports.default = _default;
+},{}],"src/handle-player-2.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function handlePlayer2(data, socket) {
+  var gameContainer = document.getElementById("enter-game");
+  var text1 = document.createElement("h3");
+  text1.textContent = "You've joined ".concat(data.name, "'s game!");
+  var text2 = document.createElement("h3");
+  text2.textContent = "Please enter your name below:";
+  var form = document.createElement('form');
+  var input = document.createElement("input");
+  input.setAttribute("id", "player-2-name");
+  var button = document.createElement("button");
+  button.setAttribute('type', 'submit');
+  button.textContent = "Enter Game";
+  gameContainer.innerHTML = "";
+  gameContainer.appendChild(text1);
+  gameContainer.appendChild(text2);
+  gameContainer.appendChild(form);
+  form.appendChild(input);
+  form.appendChild(button);
+  button.addEventListener("click", function (e) {
+    e.preventDefault();
+    var player2Name = document.getElementById("player-2-name").value;
+
+    if (player2Name) {
+      console.log(player2Name);
+      socket.emit("bothPlayersJoined", {
+        room: data.name,
+        socket1: data.socket1,
+        player1: data.name,
+        socket2: socket.id,
+        player2: player2Name
+      });
+    }
+  });
+}
+
+var _default = handlePlayer2;
+exports.default = _default;
+},{}],"src/get-coordinates.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9403,6 +8714,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getCoordinates = getCoordinates;
 exports.resetPlayerData = resetPlayerData;
+exports.handleMoveSubmit = handleMoveSubmit;
+exports.handleReset = handleReset;
 exports.playerMove = void 0;
 ///the move object
 var playerMove = {
@@ -9418,107 +8731,410 @@ var playerMove = {
   }
 };
 exports.playerMove = playerMove;
-var body = document.querySelector("div");
-var playerData = document.getElementById("player-data");
+var moveContainer = document.getElementById("player-move");
 var userPlayFrom = document.createElement("p");
-userPlayFrom.textContent = "Move from: ";
+userPlayFrom.textContent = "At: ";
 var userPlayTo = document.createElement("p");
-userPlayTo.textContent = "Move to: ";
-playerData.appendChild(userPlayFrom);
-playerData.appendChild(userPlayTo); // returns the player object with the move values
+userPlayTo.textContent = "To: ";
+moveContainer.appendChild(userPlayFrom);
+moveContainer.appendChild(userPlayTo);
+
+function handleMoveSubmit(dataHandler) {
+  // create submit to submit the input and output
+  // let form = document.createElement('form');
+  var div = document.createElement('div');
+  var label = document.createElement('label');
+  label.textContent = 'Checkmate';
+  var checkbox = document.createElement('input');
+  checkbox.setAttribute('type', 'checkbox');
+  checkbox.setAttribute('value', 'Checkmake');
+  div.appendChild(label);
+  div.appendChild(checkbox);
+  var submit = document.createElement("button");
+  submit.setAttribute('type', 'submit');
+  submit.textContent = "Submit Move"; // moveContainer.appendChild(label);
+  // moveContainer.appendChild(checkbox);
+
+  moveContainer.appendChild(div);
+  moveContainer.appendChild(submit); // moveContainer.appendChild(form);
+
+  submit.addEventListener("click", dataHandler);
+}
+
+function handleReset(playerMove) {
+  // create rest to rest the playerMove
+  var submit = document.createElement("button");
+  submit.textContent = "Reset";
+  moveContainer.appendChild(submit);
+  submit.addEventListener("click", function () {
+    return resetPlayerData();
+  });
+} // returns the player object with the move values
+
 
 function getCoordinates(e) {
   e.preventDefault();
   console.log("the target id: ", e.target.id.split(""));
-  var coordinate = e.target.id.split("");
+  var coordinate = e.target.id.split("").map(function (val) {
+    return parseInt(val, 10);
+  });
+  coordinate.filter(function (val) {
+    return val * 0 === 0;
+  });
+  if (coordinate.length < 2) return;
+  var xLetter = String.fromCharCode(coordinate[0] + 96);
+  var yNum = -1 * coordinate[1] + 9;
 
   if (playerMove.xStart === null) {
-    playerMove.xStart = parseInt(coordinate[0], 10);
-    playerMove.yStart = parseInt(coordinate[1], 10);
-    appendTextNode(userPlayFrom, playerMove.yStart, playerMove.xStart);
+    playerMove.xStart = coordinate[0];
+    playerMove.yStart = coordinate[1];
+    appendTextNode(userPlayFrom, yNum, xLetter);
   } else if (playerMove.xEnd === null) {
-    playerMove.xEnd = parseInt(coordinate[0], 10);
-    playerMove.yEnd = parseInt(coordinate[1], 10);
-    appendTextNode(userPlayTo, playerMove.yEnd, playerMove.xEnd);
+    playerMove.xEnd = coordinate[0];
+    playerMove.yEnd = coordinate[1];
+    appendTextNode(userPlayTo, yNum, xLetter);
   }
 }
 
 function appendTextNode(appendTo, row, col) {
-  var textNode = document.createTextNode("row = ".concat(row, ", col=").concat(col));
+  var textNode = document.createTextNode("".concat(row, ", ").concat(col));
   appendTo.appendChild(textNode);
 }
 
 function resetPlayerData() {
-  userPlayFrom.textContent = "Move from: ";
-  userPlayTo.textContent = "Move to: ";
-} // create submit to submit the input and output
-// let submit = document.createElement("button");
-// submit.textContent = "Submit Move";
-// playerData.appendChild(submit);
-// submit.addEventListener("click", submitMoveHandler);
-// function submitMoveHandler(e) {
-//   e.preventDefault();
-//   if (
-//     boardMatrix[playerMove.yStart][playerMove.xStart] &&
-//     playerMove.xEnd !== null
-//   ) {
-// if (boardMatrix[playerMove.yEnd][playerMove.xEnd] !== null) {
-//   alert("That space is already occupied. Please try again");
-// } else {
-//   this logic needs to move to the server
-//   player1.move(boardMatrix, playerMove);
-//   let moved = boardMatrix[playerMove.yStart][
-//     playerMove.xStart
-//   ].checkAndUpdate(playerMove.xEnd, playerMove.yEnd, boardMatrix);
-//   if (!moved) {
-//     alert("Not a valid move, please try again.");
-//   }
-//     }
-//   } else {
-//     alert("There is no piece on the board at that position. Please try again.");
-//   }
-//   playerMove.reset();
-//   resetPlayerData();
-// }
-// function resetPlayerData() {
-//   userPlayFrom.textContent = "Move from: ";
-//   userPlayTo.textContent = "Move to: ";
-// }
+  userPlayFrom.textContent = "At: ";
+  userPlayTo.textContent = "To: ";
+  playerMove.reset();
+}
+},{}],"src/draw-board.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default(boardMatrix, boardContainer, eventCallback) {
+  console.log('draw board');
+
+  for (var i = 0; i < boardMatrix.length; i++) {
+    var row = document.createElement("div");
+    row.setAttribute("class", "rowContainer");
+
+    for (var j = 0; j < boardMatrix[i].length; j++) {
+      var square = document.createElement("span");
+      square.setAttribute("id", "".concat(j).concat(i));
+
+      if (boardMatrix[i][j] && boardMatrix[i][j].hex) {
+        square.innerHTML = boardMatrix[i][j].hex;
+      }
+
+      if (i === 0) {
+        square.innerHTML = boardMatrix[i][j];
+      } else if (j === 0) {
+        square.innerHTML = -1 * boardMatrix[i][j] + 9;
+      } else if (i % 2 === 0) {
+        j % 2 === 0 ? square.setAttribute("class", "black") : square.setAttribute("class", "salmon");
+      } else {
+        j % 2 === 0 ? square.setAttribute("class", "salmon") : square.setAttribute("class", "black");
+      }
+
+      row.appendChild(square);
+    }
+
+    document.getElementById('player-move').setAttribute('class', '');
+    boardContainer.appendChild(row);
+    boardContainer.addEventListener("click", eventCallback);
+  }
+}
+},{}],"src/handle-new-move.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _getCoordinates = require("./get-coordinates.js");
+
+var _drawBoard = _interopRequireDefault(require("./draw-board.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//draws the board to ready the game for both players
+//emits "playerMove" with the player move data
+//socket emit is attached to click event on button; sent to server when player submits their move
+//server will determine if the move is valid and send appropriate data back
+function handleNewMove(data, socket) {
+  var gameContainer = document.getElementById("enter-game");
+  var boardContainer = document.querySelector("section");
+
+  if (data.playerMove !== null) {
+    console.log("moving player", data.playerMove);
+    var _data$playerMove = data.playerMove,
+        xStart = _data$playerMove.xStart,
+        yStart = _data$playerMove.yStart,
+        xEnd = _data$playerMove.xEnd,
+        yEnd = _data$playerMove.yEnd;
+    var movedFrom = document.getElementById("".concat(xStart).concat(yStart));
+    var hex = movedFrom.innerHTML;
+    movedFrom.innerHTML = null;
+    var movedTo = document.getElementById("".concat(xEnd).concat(yEnd));
+    movedTo.innerHTML = hex;
+  } else {
+    //we need to check the status of the checkbox
+    var submitMoveHandler = function submitMoveHandler(e) {
+      var checkmate = document.querySelector("input");
+      checkmate = checkmate.checked;
+      console.log('checkmate bool', checkmate);
+
+      if (_getCoordinates.playerMove.xEnd && _getCoordinates.playerMove.yEnd) {
+        socket.emit("playerMoved", {
+          playerMove: _getCoordinates.playerMove,
+          player1: data.player1,
+          player2: data.player2,
+          gameId: data.gameId,
+          checkmate: checkmate
+        });
+
+        _getCoordinates.playerMove.reset();
+
+        (0, _getCoordinates.resetPlayerData)();
+      }
+    };
+
+    gameContainer.remove();
+    (0, _drawBoard.default)(data.board, boardContainer, _getCoordinates.getCoordinates); //this renders the buttons we need to click
+
+    (0, _getCoordinates.handleMoveSubmit)(submitMoveHandler);
+    (0, _getCoordinates.handleReset)();
+  }
+}
+
+var _default = handleNewMove;
+exports.default = _default;
+},{"./get-coordinates.js":"src/get-coordinates.js","./draw-board.js":"src/draw-board.js"}],"src/canvas.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = showCanvasConfetti;
+
+function showCanvasConfetti() {
+  var canvas = document.createElement("canvas");
+  canvas.setAttribute("id", "confetti");
+  var container = document.querySelector("div");
+  container.innerHTML = "";
+  container.appendChild(canvas);
+  var ctx = canvas.getContext("2d");
+  var startTime = new Date().getTime();
+  var currentTime = startTime;
+  var width, height;
+  var items = [];
+  var colors = ["#3788c7", "#f298be", "#f6e25b", "#8a5bac", "#00a944", "#ec2a28", "#43c4c0", "#f4b92f"];
+  var index = 150;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+
+  function particle(x, y, i, minv) {
+    var angle = Math.random() * (Math.PI * 2);
+    var amount = Math.random() * 15.0 + minv;
+    var vx = Math.sin(angle) * amount;
+    var vy = Math.cos(angle) * amount;
+    return {
+      x: x,
+      y: y,
+      vx: vx,
+      vy: vy,
+      width: Math.random() * 15 + 8,
+      height: Math.random() * 20 + 8,
+      color: colors[i % colors.length],
+      circle: Math.random() > 0.8,
+      rotate: Math.random() * 180,
+      direction: Math.random() * 5 - 2.5,
+      fallSpeed: Math.random() / 10 + 0.1
+    };
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+    var time = new Date().getTime();
+    var delta = (time - currentTime) / (1000 / 60);
+    currentTime = time;
+
+    if (time - startTime > 1500) {
+      items[++index % 600] = particle(Math.random() * width, -20, index, 10);
+    }
+
+    items.forEach(function (item) {
+      item.vx *= 1.0 - 0.05 * delta;
+      item.vy += delta * item.fallSpeed;
+      item.vy /= 1.0 + 0.05 * delta;
+      item.x += delta * item.vx;
+      item.y += delta * item.vy;
+      item.rotate += delta * item.direction;
+      ctx.fillStyle = item.color;
+
+      if (item.circle) {
+        ctx.beginPath();
+        ctx.arc(item.x, item.y, item.width / 2, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
+      } else {
+        ctx.save();
+        ctx.beginPath();
+        ctx.translate(item.x, item.y);
+        ctx.rotate(item.rotate * Math.PI / 180);
+        ctx.fillRect(-item.width / 2, -item.height / 2, item.width, item.height);
+        ctx.translate(-item.x, -item.y);
+        ctx.restore();
+        ctx.closePath();
+      }
+    });
+    window.requestAnimationFrame(render);
+  }
+
+  resize();
+
+  for (var i = 0; i < index; i++) {
+    items[i] = particle(width / 2, height / 2, i, 10);
+  }
+
+  window.onclick = function (e) {
+    for (var i = 0; i < 150; i++) {
+      items[(index + 150 + i) % 600] = particle(e.clientX, e.clientY, i, 10);
+    }
+
+    index = (index + 150) % 600;
+  };
+
+  window.ontouchstart = function (e) {
+    for (var d = 0; d < e.changedTouches.length; d++) {
+      for (var i = 0; i < 150; i++) {
+        items[(index + 150 + i) % 600] = particle(e.changedTouches[d].pageX, e.changedTouches[d].pageY, i, 10);
+      }
+
+      index = (index + 150) % 600;
+    }
+  };
+
+  window.onresize = resize;
+  render();
+}
+},{}],"src/canvas-loose.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = rain;
+
+function rain() {
+  var canvas = document.createElement("canvas");
+  var container = document.querySelector("div");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  container.innerHTML = "";
+  container.appendChild(canvas);
+  var ctx = canvas.getContext("2d");
+  var w = canvas.width;
+  var h = canvas.height;
+  ctx.strokeStyle = "rgba(60,130,280,0.9)";
+  ctx.lineWidth = 1;
+  ctx.lineCap = "round";
+  var init = [];
+  var maxParts = 1000;
+
+  for (var a = 0; a < maxParts; a++) {
+    init.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      l: Math.random() * 1,
+      xs: -4 + Math.random() * 4 + 2,
+      ys: Math.random() * 10 + 10
+    });
+  }
+
+  var particles = [];
+
+  for (var b = 0; b < maxParts; b++) {
+    particles[b] = init[b];
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+
+    for (var c = 0; c < particles.length; c++) {
+      var p = particles[c];
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + p.l * p.xs, p.y + p.l * p.ys);
+      ctx.stroke();
+    }
+
+    move();
+  }
+
+  function move() {
+    for (var b = 0; b < particles.length; b++) {
+      var p = particles[b];
+      p.x += p.xs;
+      p.y += p.ys;
+
+      if (p.x > w || p.y > h) {
+        p.x = Math.random() * w;
+        p.y = -20;
+      }
+    }
+  }
+
+  setInterval(draw, 50);
+}
 },{}],"src/game-app.js":[function(require,module,exports) {
 "use strict";
 
 var _socket = _interopRequireDefault(require("socket.io-client"));
 
-var _drawBoard = _interopRequireDefault(require("./draw-board.js"));
+var _showGames = _interopRequireDefault(require("./show-games.js"));
 
-var _board = _interopRequireDefault(require("./board.js"));
+var _handlePlayer = _interopRequireDefault(require("./handle-player-2.js"));
 
-var _getCoordinates = require("./get-coordinates.js");
+var _handleNewMove = _interopRequireDefault(require("./handle-new-move.js"));
+
+var _canvas = _interopRequireDefault(require("./canvas.js"));
+
+var _canvasLoose = _interopRequireDefault(require("./canvas-loose.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import from "./get-coordinates.js"
 (function () {
   console.log("iffe");
   var gameContainer = document.getElementById("enter-game");
 
   var socket = _socket.default.connect("http://localhost:4000"),
       player,
-      game;
+      game; // let socket = io.connect("https://chess-match-server.herokuapp.com/"),
+  //   player,
+  //   game;
+
 
   var boardContainer = document.querySelector("section");
   var newGame = document.getElementById("new-game");
   newGame.addEventListener("click", handleNewGame);
-  var joinGame = document.getElementById("game-container");
-  joinGame.addEventListener("click", handleJoinGame);
+  socket.on("showGames", function (games) {
+    (0, _showGames.default)(games, handleJoinGame);
+  });
 
   function handleNewGame(e) {
     e.preventDefault();
-    console.log("player 1 name");
     var name = document.getElementById("player-1-name").value;
-    console.log(name);
 
-    if (!name) {//alert notice to enter the name
+    if (!name) {
+      return alert("Please enter your name.");
     }
 
     socket.emit("createGame", {
@@ -9528,183 +9144,66 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   }
 
   socket.on("connectToNewGame", function (data) {
-    //display this message as appropriate
-    console.log('data, ', data);
-    var gameId = document.createElement("p");
-    gameId.setAttribute("id", data.name);
-    gameId.textContent = "Join ".concat(data.name, "'s game!");
-    joinGame.appendChild(gameId);
-  });
+    (0, _showGames.default)(data.games, handleJoinGame);
+  }); //select the game they would like to join
 
   function handleJoinGame(e) {
-    e.preventDefault(); //click the game they would like to join, then be prompted to enter in their name
-
+    e.preventDefault();
     var roomId = e.target.id;
-    console.log("trying to join a game with id: ", roomId);
-    var name = "player2";
     socket.emit("joinGame", {
       room: roomId,
       name: roomId
     });
   }
 
+  socket.on("updateAvailableGames", function (data) {
+    (0, _showGames.default)(data.games, handleJoinGame);
+  });
   socket.on("player1", function (data) {
-    console.log('player 1 screen');
-    document.getElementById('enter-game').innerHTML = "waiting for your opponent to join your game...";
+    console.log("player 1 screen");
+    document.getElementById("enter-game").innerHTML = "waiting for your opponent to join your game...";
+    document.querySelector("body").setAttribute("class", "background-white");
   });
   socket.on("player2", function (data) {
-    console.log('player 2 screen');
-    var text1 = document.createElement('h3');
-    text1.textContent = "You've joined ".concat(data.name, "'s game!");
-    ;
-    var text2 = document.createElement('h3');
-    text2.textContent = "Please enter your name below:";
-    var input = document.createElement('input');
-    input.setAttribute('id', 'player-2-name');
-    var button = document.createElement('button');
-    button.textContent = "Enter Game";
-    gameContainer.innerHTML = '';
-    gameContainer.appendChild(text1);
-    gameContainer.appendChild(text2);
-    gameContainer.appendChild(input);
-    gameContainer.appendChild(button);
-    button.addEventListener('click', function (e) {
-      e.preventDefault();
-      var player2Name = document.getElementById('player-2-name').value;
+    (0, _handlePlayer.default)(data, socket);
+  }); // game obj {gameId: name, board: matrix, playerMove: player Move Obj, player1: name, player2: name }
 
-      if (player2Name) {
-        console.log(player2Name);
-        socket.emit('bothPlayersJoined', {
-          room: data.name,
-          player1: data.name,
-          player2: player2Name
-        });
-      }
-    });
+  socket.on("drawBoard", function (data) {
+    var heading = document.querySelector("h2");
+    heading.textContent = "".concat(data.player1.toUpperCase(), " vs ").concat(data.player2.toUpperCase());
+    (0, _handleNewMove.default)(data, socket);
   });
-  socket.on('drawBoard', function (game) {
-    console.log('the game', game);
-    newGame.remove();
-    (0, _drawBoard.default)(game.board, boardContainer, _getCoordinates.getCoordinates);
-    var playerData = document.getElementById("player-data");
-    var userPlayFrom = document.createElement("p");
-    userPlayFrom.textContent = "Move from: ";
-    var userPlayTo = document.createElement("p");
-    userPlayTo.textContent = "Move to: ";
-    playerData.appendChild(userPlayFrom);
-    playerData.appendChild(userPlayTo); // create submit to submit the input and output
-
-    var submit = document.createElement("button");
-    submit.textContent = "Submit Move";
-    playerData.appendChild(submit);
-    submit.addEventListener("click", submitMoveHandler);
-
-    function submitMoveHandler(e) {
-      if (_getCoordinates.playerMove.xEnd && _getCoordinates.playerMove.yEnd) {
-        game.playerMove = _getCoordinates.playerMove;
-        socket.emit('playerMoved', {
-          playerMove: game.playerMove,
-          roomId: game.roomId
-        });
-
-        _getCoordinates.playerMove.reset();
-
-        (0, _getCoordinates.resetPlayerData)();
-      }
-    }
+  socket.on("wait", function () {
+    var data = document.getElementById("player-move");
+    data.setAttribute("class", "hidden");
+    var wait = document.getElementById("wait");
+    wait.setAttribute("class", "");
+  });
+  socket.on("go", function () {
+    var wait = document.getElementById("wait");
+    wait.setAttribute("class", "hidden");
+    var data = document.getElementById("player-move");
+    data.setAttribute("class", "");
+  });
+  socket.on("unvalidMove", function (message) {
+    alert(message);
+  });
+  socket.on('winner', function () {
+    (0, _canvas.default)();
+    alert('you won!!!');
+  });
+  socket.on('loose', function () {
+    (0, _canvasLoose.default)();
+    alert('you lost :(');
   });
 })();
-},{"socket.io-client":"node_modules/socket.io-client/lib/index.js","./draw-board.js":"src/draw-board.js","./board.js":"src/board.js","./get-coordinates.js":"src/get-coordinates.js"}],"src/index.js":[function(require,module,exports) {
+},{"socket.io-client":"node_modules/socket.io-client/lib/index.js","./show-games.js":"src/show-games.js","./handle-player-2.js":"src/handle-player-2.js","./handle-new-move.js":"src/handle-new-move.js","./canvas.js":"src/canvas.js","./canvas-loose.js":"src/canvas-loose.js"}],"src/index.js":[function(require,module,exports) {
 "use strict";
 
 require("./styles.css");
 
-var _board = _interopRequireDefault(require("./board.js"));
-
-var _child_process = require("child_process");
-
-var _drawBoard = _interopRequireDefault(require("./draw-board.js"));
-
 require("./game-app.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// import { player1, player2 } from "./app.js";
-//store parent node
-var board = document.querySelector("section"); // renderBoard(boardMatrix, board, getCoordinates);
-///the move object
-// let playerMove = {
-//   xStart: null,
-//   yStart: null,
-//   xEnd: null,
-//   yEnd: null,
-//   reset() {
-//     this.xStart = null;
-//     this.yStart = null;
-//     this.xEnd = null;
-//     this.yEnd = null;
-//   }
-// };
-// let body = document.querySelector("div");
-// let playerData = document.getElementById("player-data");
-// let userPlayFrom = document.createElement("p");
-// userPlayFrom.textContent = "Move from: ";
-// let userPlayTo = document.createElement("p");
-// userPlayTo.textContent = "Move to: ";
-// playerData.appendChild(userPlayFrom);
-// playerData.appendChild(userPlayTo);
-////////////
-// function getCoordinates(e) {
-//   e.preventDefault();
-//   console.log("the target id: ", e.target.id.split(""));
-//   let coordinate = e.target.id.split("");
-//   if (playerMove.xStart === null) {
-//     playerMove.xStart = parseInt(coordinate[0], 10);
-//     playerMove.yStart = parseInt(coordinate[1], 10);
-//     appendTextNode(userPlayFrom, playerMove.yStart, playerMove.xStart);
-//   } else if (playerMove.xEnd === null) {
-//     playerMove.xEnd = parseInt(coordinate[0], 10);
-//     playerMove.yEnd = parseInt(coordinate[1], 10);
-//     appendTextNode(userPlayTo, playerMove.yEnd, playerMove.xEnd);
-//   }
-// }
-// create submit to submit the input and output
-// let submit = document.createElement("button");
-// submit.textContent = "Submit Move";
-// playerData.appendChild(submit);
-// submit.addEventListener("click", clickHandler);
-
-function clickHandler(e) {
-  e.preventDefault();
-
-  if (_board.default[playerMove.yStart][playerMove.xStart] && playerMove.xEnd !== null) {
-    if (_board.default[playerMove.yEnd][playerMove.xEnd] !== null) {
-      alert("That space is already occupied. Please try again");
-    } else {
-      // returns boolean true if piece was successfully moved
-      player1.move(_board.default, playerMove);
-
-      var moved = _board.default[playerMove.yStart][playerMove.xStart].checkAndUpdate(playerMove.xEnd, playerMove.yEnd, _board.default);
-
-      if (!moved) {
-        alert("Not a valid move, please try again.");
-      }
-    }
-  } else {
-    alert("There is no piece on the board at that position. Please try again.");
-  }
-
-  playerMove.reset();
-  resetPlayerData();
-} // function resetPlayerData() {
-//   userPlayFrom.textContent = "Move from: ";
-//   userPlayTo.textContent = "Move to: ";
-// }
-// function appendTextNode(appendTo, row, col) {
-//   let textNode = document.createTextNode(`row = ${row}, col=${col}`);
-//   appendTo.appendChild(textNode);
-// }
-},{"./styles.css":"src/styles.css","./board.js":"src/board.js","child_process":"node_modules/parcel-bundler/src/builtins/_empty.js","./draw-board.js":"src/draw-board.js","./game-app.js":"src/game-app.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./styles.css":"src/styles.css","./game-app.js":"src/game-app.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -9732,7 +9231,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64943" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51448" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
