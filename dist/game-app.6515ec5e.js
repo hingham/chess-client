@@ -8569,7 +8569,6 @@ exports.default = void 0;
 
 function showGames(games, eventListener) {
   var joinGame = document.getElementById("game-container");
-  console.log("show games", games);
   joinGame.innerHTML = "";
 
   if (Object.keys(games).length > 0) {
@@ -8578,7 +8577,8 @@ function showGames(games, eventListener) {
     joinGame.appendChild(heading);
 
     for (var game in games) {
-      var gameId = document.createElement("p");
+      var gameId = document.createElement("button");
+      gameId.setAttribute('class', 'join-game');
       gameId.setAttribute("id", game);
       gameId.textContent = "".concat(game[0].toUpperCase()).concat(game.slice(1), "'s game!");
       gameId.addEventListener("click", eventListener);
@@ -8620,7 +8620,6 @@ function handlePlayer2(data, socket) {
     var player2Name = document.getElementById("player-2-name").value;
 
     if (player2Name) {
-      console.log(player2Name);
       socket.emit("bothPlayersJoined", {
         room: data.name,
         socket1: data.socket1,
@@ -8680,24 +8679,21 @@ function handleMoveSubmit(dataHandler) {
   div.appendChild(checkbox);
   var submit = document.createElement("button");
   submit.setAttribute('type', 'submit');
-  submit.textContent = "Submit Move"; // moveContainer.appendChild(label);
-  // moveContainer.appendChild(checkbox);
-
+  submit.textContent = "Submit Move";
   moveContainer.appendChild(div);
-  moveContainer.appendChild(submit); // moveContainer.appendChild(form);
-
+  moveContainer.appendChild(submit);
   submit.addEventListener("click", dataHandler);
-}
+} // create button to reset the playerMove object
+
 
 function handleReset(playerMove) {
-  // create rest to rest the playerMove
   var submit = document.createElement("button");
   submit.textContent = "Reset";
   moveContainer.appendChild(submit);
   submit.addEventListener("click", function () {
     return resetPlayerData();
   });
-} // returns the player object with the move values
+} // return the player object with the move values
 
 
 function getCoordinates(e) {
@@ -8743,8 +8739,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = _default;
 
 function _default(boardMatrix, boardContainer, eventCallback) {
-  console.log('draw board');
-
   for (var i = 0; i < boardMatrix.length; i++) {
     var row = document.createElement("div");
     row.setAttribute("class", "rowContainer");
@@ -8767,12 +8761,14 @@ function _default(boardMatrix, boardContainer, eventCallback) {
         j % 2 === 0 ? square.setAttribute("class", "salmon") : square.setAttribute("class", "black");
       }
 
+      square.setAttribute('tabindex', '0');
       row.appendChild(square);
     }
 
     document.getElementById('player-move').setAttribute('class', '');
     boardContainer.appendChild(row);
     boardContainer.addEventListener("click", eventCallback);
+    boardContainer.addEventListener("keypress", eventCallback);
   }
 }
 },{}],"src/handle-new-move.js":[function(require,module,exports) {
@@ -8798,7 +8794,6 @@ function handleNewMove(data, socket) {
   var boardContainer = document.querySelector("section");
 
   if (data.playerMove !== null) {
-    console.log("moving player", data.playerMove);
     var _data$playerMove = data.playerMove,
         xStart = _data$playerMove.xStart,
         yStart = _data$playerMove.yStart,
@@ -8810,11 +8805,9 @@ function handleNewMove(data, socket) {
     var movedTo = document.getElementById("".concat(xEnd).concat(yEnd));
     movedTo.innerHTML = hex;
   } else {
-    //we need to check the status of the checkbox
     var submitMoveHandler = function submitMoveHandler(e) {
       var checkmate = document.querySelector("input");
       checkmate = checkmate.checked;
-      console.log('checkmate bool', checkmate);
 
       if (_getCoordinates.playerMove.xEnd && _getCoordinates.playerMove.yEnd) {
         socket.emit("playerMoved", {
@@ -8832,7 +8825,7 @@ function handleNewMove(data, socket) {
     };
 
     gameContainer.remove();
-    (0, _drawBoard.default)(data.board, boardContainer, _getCoordinates.getCoordinates); //this renders the buttons we need to click
+    (0, _drawBoard.default)(data.board, boardContainer, _getCoordinates.getCoordinates); //render buttons to click to submit move
 
     (0, _getCoordinates.handleMoveSubmit)(submitMoveHandler);
     (0, _getCoordinates.handleReset)();
@@ -9040,7 +9033,6 @@ var _canvasLoose = _interopRequireDefault(require("./canvas-loose.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (function () {
-  console.log("iffe");
   var gameContainer = document.getElementById("enter-game"); // let socket = io.connect("http://localhost:4000"),
   //   player,
   //   game;
@@ -9087,7 +9079,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     (0, _showGames.default)(data.games, handleJoinGame);
   });
   socket.on("player1", function (data) {
-    console.log("player 1 screen");
     document.getElementById("enter-game").innerHTML = "waiting for your opponent to join your game...";
     document.querySelector("body").setAttribute("class", "background-white");
   });
@@ -9152,7 +9143,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63668" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57089" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

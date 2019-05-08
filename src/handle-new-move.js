@@ -16,7 +16,6 @@ function handleNewMove(data, socket) {
   let boardContainer = document.querySelector("section");
 
   if (data.playerMove !== null) {
-    console.log("moving player", data.playerMove);
     let { xStart, yStart, xEnd, yEnd } = data.playerMove;
     let movedFrom = document.getElementById(`${xStart}${yStart}`);
     let hex = movedFrom.innerHTML;
@@ -28,15 +27,13 @@ function handleNewMove(data, socket) {
 
     drawBoard(data.board, boardContainer, getCoordinates);
 
-    //this renders the buttons we need to click
+    //render buttons to click to submit move
     handleMoveSubmit(submitMoveHandler);
     handleReset();
-    //we need to check the status of the checkbox
 
     function submitMoveHandler(e) {
       let checkmate = document.querySelector("input");
       checkmate = checkmate.checked;
-      console.log('checkmate bool', checkmate);
 
       if (playerMove.xEnd && playerMove.yEnd) {
         socket.emit("playerMoved", {

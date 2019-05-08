@@ -42,24 +42,21 @@ function handleMoveSubmit(dataHandler) {
   submit.setAttribute('type', 'submit');
   submit.textContent = "Submit Move";
   
-  // moveContainer.appendChild(label);
-  // moveContainer.appendChild(checkbox);
   moveContainer.appendChild(div);
   moveContainer.appendChild(submit);
-  // moveContainer.appendChild(form);
   
   submit.addEventListener("click", dataHandler);
 }
 
+// create button to reset the playerMove object
 function handleReset(playerMove) {
-  // create rest to rest the playerMove
   let submit = document.createElement("button");
   submit.textContent = "Reset";
   moveContainer.appendChild(submit);
   submit.addEventListener("click", ()=>resetPlayerData() );
 }
 
-// returns the player object with the move values
+// return the player object with the move values
 function getCoordinates(e) {
   e.preventDefault();
   console.log("the target id: ", e.target.id.split(""));

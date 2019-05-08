@@ -8,7 +8,6 @@ import showCanvasLoose from "./canvas-loose.js";
 import rain from "./canvas-loose.js";
 
 (function() {
-  console.log("iffe");
 
   let gameContainer = document.getElementById("enter-game");
   // let socket = io.connect("http://localhost:4000"),
@@ -52,7 +51,6 @@ import rain from "./canvas-loose.js";
   });
 
   socket.on("player1", data => {
-    console.log("player 1 screen");
     document.getElementById("enter-game").innerHTML =
       "waiting for your opponent to join your game...";
     document.querySelector("body").setAttribute("class", "background-white");
