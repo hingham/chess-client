@@ -1,8 +1,8 @@
 export default function(boardMatrix, boardContainer, eventCallback) {
-  console.log('draw board');
   for (let i = 0; i < boardMatrix.length; i++) {
     let row = document.createElement("div");
     row.setAttribute("class", "rowContainer");
+
     for (let j = 0; j < boardMatrix[i].length; j++) {
       let square = document.createElement("span");
       square.setAttribute("id", `${j}${i}`);
@@ -24,10 +24,13 @@ export default function(boardMatrix, boardContainer, eventCallback) {
           ? square.setAttribute("class", "salmon")
           : square.setAttribute("class", "black");
       }
+      square.setAttribute('tabindex', '0');
       row.appendChild(square);
     }
     document.getElementById('player-move').setAttribute('class', '');
     boardContainer.appendChild(row);
     boardContainer.addEventListener("click", eventCallback);
+    boardContainer.addEventListener("keypress", eventCallback);
+
   }
 }

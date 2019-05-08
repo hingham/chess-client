@@ -27,7 +27,6 @@ function handlePlayer2(data, socket) {
       e.preventDefault();
       let player2Name = document.getElementById("player-2-name").value;
       if (player2Name) {
-        console.log(player2Name);
         socket.emit("bothPlayersJoined", {
           room: data.name,
           socket1: data.socket1,
