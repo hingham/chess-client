@@ -11,8 +11,10 @@ export default function(boardMatrix, boardContainer, eventCallback) {
       }
       if (i === 0) {
         square.innerHTML = boardMatrix[i][j];
+        square.setAttribute('class', 'white');
       }else if (j===0){
         square.innerHTML = -1 * boardMatrix[i][j] + 9;
+        square.setAttribute('class', 'white');
 
       } 
       else if (i % 2 === 0) {

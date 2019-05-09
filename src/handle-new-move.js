@@ -25,6 +25,11 @@ function handleNewMove(data, socket) {
   } else {
     gameContainer.remove();
 
+    let app = document.getElementById("app");
+    let boardContainer = document.createElement("div");
+    boardContainer.setAttribute("id", "chessboard");
+    app.appendChild(boardContainer);
+
     drawBoard(data.board, boardContainer, getCoordinates);
 
     //render buttons to click to submit move
