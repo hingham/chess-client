@@ -62,6 +62,7 @@ import rain from "./canvas-loose.js";
 
   // game obj {gameId: name, board: matrix, playerMove: player Move Obj, player1: name, player2: name }
   socket.on("drawBoard", data => {
+    
     let heading = document.querySelector("h2");
     heading.textContent = `${data.player1.toUpperCase()} vs ${data.player2.toUpperCase()}`;
     handleNewMove(data, socket);

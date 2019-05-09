@@ -12,6 +12,10 @@ p{
   margin: 0;
 }
 
+h1, h2, h3, h4 {
+  margin: 0;
+}
+
 .background-white{
   background-color: rgb(250, 249, 249);
 }
@@ -22,36 +26,48 @@ main {
   align-items: center;
   justify-items: center;
   flex: 1;
+  width: 100%;
 }
 
 #app {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-items: space-around;
   margin: 1em;
+  width: 100%;
 }
 
 body > * {
   font-family: "Quicksand", sans-serif;
 }
 
-#player-data {  
+.join-game{
+  border-radius: 20px;
+  display: block;
+  margin: .5em;
+}
+
+#player-data { 
   background-color: white;
   height: fit-content;
   margin: 0 2em;
   padding: 0.5em;
-  max-width: 18em;
 }
 
 .hidden{
   display: none;
 }
 
+#game-container{
+  margin: 2em 0em;
+}
+
 #player-move:not(.hidden){
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 #player-move > * {
@@ -67,23 +83,18 @@ p > input{
   height: fit-content;
   margin: 0 2em;
   padding: 0.5em;
-  max-width: 18em;
-}
-
-h2 {
-  margin: 0;
 }
 
 #chessboard{
   display: flex;
   flex-direction: column;
-  height: 400px;
+  height: 500px;
 }
 
 .rowContainer {
   display: flex;
   flex: 1;
-  width: 400px;
+  width: 500px;
 }
 
 .columnsContainer {
@@ -117,3 +128,6 @@ input {
   margin: 5px;
 }
 
+.white {
+  background-color: white;
+}

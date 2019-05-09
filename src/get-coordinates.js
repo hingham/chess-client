@@ -24,9 +24,6 @@ moveContainer.appendChild(userPlayFrom);
 moveContainer.appendChild(userPlayTo);
 
 function handleMoveSubmit(dataHandler) {
-  // create submit to submit the input and output
-  // let form = document.createElement('form');
-
   let div = document.createElement('div');
 
   let label = document.createElement('label');

@@ -8667,8 +8667,6 @@ moveContainer.appendChild(userPlayFrom);
 moveContainer.appendChild(userPlayTo);
 
 function handleMoveSubmit(dataHandler) {
-  // create submit to submit the input and output
-  // let form = document.createElement('form');
   var div = document.createElement('div');
   var label = document.createElement('label');
   label.textContent = 'Checkmate';
@@ -8753,8 +8751,10 @@ function _default(boardMatrix, boardContainer, eventCallback) {
 
       if (i === 0) {
         square.innerHTML = boardMatrix[i][j];
+        square.setAttribute('class', 'white');
       } else if (j === 0) {
         square.innerHTML = -1 * boardMatrix[i][j] + 9;
+        square.setAttribute('class', 'white');
       } else if (i % 2 === 0) {
         j % 2 === 0 ? square.setAttribute("class", "black") : square.setAttribute("class", "salmon");
       } else {
@@ -8825,7 +8825,14 @@ function handleNewMove(data, socket) {
     };
 
     gameContainer.remove();
-    (0, _drawBoard.default)(data.board, boardContainer, _getCoordinates.getCoordinates); //render buttons to click to submit move
+    var app = document.getElementById("app");
+
+    var _boardContainer = document.createElement("div");
+
+    _boardContainer.setAttribute("id", "chessboard");
+
+    app.appendChild(_boardContainer);
+    (0, _drawBoard.default)(data.board, _boardContainer, _getCoordinates.getCoordinates); //render buttons to click to submit move
 
     (0, _getCoordinates.handleMoveSubmit)(submitMoveHandler);
     (0, _getCoordinates.handleReset)();
@@ -9143,7 +9150,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57089" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58535" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
