@@ -29,13 +29,14 @@ main {
   width: 100%;
 }
 
+
 #app {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-items: space-around;
   margin: 1em;
-  width: 100%;
+  /* width: 100%; */
 }
 
 body > * {
@@ -46,6 +47,10 @@ body > * {
   border-radius: 20px;
   display: block;
   margin: .5em;
+}
+
+#directions{
+  margin-top: em;
 }
 
 #player-data { 
@@ -132,5 +137,16 @@ input {
   background-color: white;
 }
 
+@media screen and (max-width: 400px){
+  #chessboard{
+    height: 90vw;
+  } 
+  .rowContainer{
+    width: 90vw;
+  }
+  #player-move > h3{
+    display: none;
+  }
+}
 
 /*# sourceMappingURL=/styles.dd855970.css.map */

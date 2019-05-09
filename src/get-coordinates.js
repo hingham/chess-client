@@ -27,7 +27,7 @@ function handleMoveSubmit(dataHandler) {
   let div = document.createElement('div');
 
   let label = document.createElement('label');
-  label.textContent = 'Checkmate'
+  label.textContent = 'Check'
   
   let checkbox = document.createElement('input');
   checkbox.setAttribute('type', 'checkbox');

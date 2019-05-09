@@ -8669,7 +8669,7 @@ moveContainer.appendChild(userPlayTo);
 function handleMoveSubmit(dataHandler) {
   var div = document.createElement('div');
   var label = document.createElement('label');
-  label.textContent = 'Checkmate';
+  label.textContent = 'Check';
   var checkbox = document.createElement('input');
   checkbox.setAttribute('type', 'checkbox');
   checkbox.setAttribute('value', 'Checkmake');
@@ -8737,6 +8737,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = _default;
 
 function _default(boardMatrix, boardContainer, eventCallback) {
+  document.getElementById('directions').remove();
+
   for (var i = 0; i < boardMatrix.length; i++) {
     var row = document.createElement("div");
     row.setAttribute("class", "rowContainer");
@@ -8806,8 +8808,8 @@ function handleNewMove(data, socket) {
     movedTo.innerHTML = hex;
   } else {
     var submitMoveHandler = function submitMoveHandler(e) {
-      var checkmate = document.querySelector("input");
-      checkmate = checkmate.checked;
+      var check = document.querySelector("input");
+      check = check.checked;
 
       if (_getCoordinates.playerMove.xEnd && _getCoordinates.playerMove.yEnd) {
         socket.emit("playerMoved", {
@@ -8815,7 +8817,7 @@ function handleNewMove(data, socket) {
           player1: data.player1,
           player2: data.player2,
           gameId: data.gameId,
-          checkmate: checkmate
+          check: check
         });
 
         _getCoordinates.playerMove.reset();
@@ -9040,13 +9042,14 @@ var _canvasLoose = _interopRequireDefault(require("./canvas-loose.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (function () {
-  var gameContainer = document.getElementById("enter-game"); // let socket = io.connect("http://localhost:4000"),
+  var gameContainer = document.getElementById("enter-game");
+
+  var socket = _socket.default.connect("http://localhost:4000"),
+      player,
+      game; // let socket = io.connect("https://chess-match-server.herokuapp.com/"),
   //   player,
   //   game;
 
-  var socket = _socket.default.connect("https://chess-match-server.herokuapp.com/"),
-      player,
-      game;
 
   var boardContainer = document.querySelector("section");
   var newGame = document.getElementById("new-game");
@@ -9113,6 +9116,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   socket.on("unvalidMove", function (message) {
     alert(message);
   });
+  socket.on('checked', function (message) {
+    alert(message);
+  });
   socket.on('winner', function () {
     (0, _canvas.default)();
     alert('you won!!!');
@@ -9150,7 +9156,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58535" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55261" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
