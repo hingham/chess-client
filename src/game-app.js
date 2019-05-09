@@ -10,12 +10,12 @@ import rain from "./canvas-loose.js";
 (function() {
 
   let gameContainer = document.getElementById("enter-game");
-  let socket = io.connect("http://localhost:4000"),
-    player,
-    game;
-  // let socket = io.connect("https://chess-match-server.herokuapp.com/"),
+  // let socket = io.connect("http://localhost:4000"),
   //   player,
   //   game;
+  let socket = io.connect("https://chess-match-server.herokuapp.com/"),
+    player,
+    game;
 
   let boardContainer = document.querySelector("section");
 
