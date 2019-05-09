@@ -37,8 +37,8 @@ function handleNewMove(data, socket) {
     handleReset();
 
     function submitMoveHandler(e) {
-      let checkmate = document.querySelector("input");
-      checkmate = checkmate.checked;
+      let check = document.querySelector("input");
+      check = check.checked;
 
       if (playerMove.xEnd && playerMove.yEnd) {
         socket.emit("playerMoved", {
@@ -46,7 +46,7 @@ function handleNewMove(data, socket) {
           player1: data.player1,
           player2: data.player2,
           gameId: data.gameId,
-          checkmate: checkmate
+          check: check
         });
         playerMove.reset();
         resetPlayerData();

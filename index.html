@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <title>Vanilla DOM Chessboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="./src/styles.css" />
     <meta charset="UTF-8" />
   </head>
@@ -14,20 +16,22 @@
         <section id="player-data">
           <div id="enter-game">
             <form>
-              <label name="name1">Enter you name to start a new game:</label>
-              <input id="player-1-name" placeholder="name1" />
+              <label name="name">Enter your name to start a new game:</label>
+              <input id="player-1-name" placeholder="name" />
               <button type="submit" id="new-game">Start New Game</button>
             </form>
-            <section id="game-container">
-            </section>
+            <section id="game-container"></section>
           </div>
 
-          <h3>Directions</h3>
-             <p>
+          <div id="directions">
+            <h3>Directions</h3>
+            <p>
               Click piece you want to move. Then, click where would like to
-              move. If the move is vaild, the board will be updated.
-              If you would like to declare checkmate, check the box before submitting your move. 
-          </p>
+              move. If the move is vaild, the board will be updated. If you
+              would like to declare check, check the box before submitting
+              your move. The first person to caputure the other's kind will win the match. 
+            </p>
+          </div>
 
           <section id="player-move" class="hidden">
             <h3>Player Move</h3>
@@ -37,7 +41,6 @@
             <h3>Please wait</h3>
             <p>Waiting for your opponent to make their move</p>
           </section>
-
         </section>
       </div>
     </main>
