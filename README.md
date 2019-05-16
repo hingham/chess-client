@@ -2,6 +2,10 @@
 #### Chess game for two players
 [Chess-Match](https://chess-match.netlify.com)
 
+#### Server
+[repo](https://github.com/hingham/chess-server)
+This link includes the code that powers the chess match server. It tracks curent games, the position of each piece on the board, and does the work to validates the move. 
+
 #### Front End
 This is the repository for frontend application for chess match, a two player, realtime chess games. To play the game, each player much go to the [chessmatch link](https://chess-match.netlify.com). One player will start a new game, and the other player must choose to join that game. Play your chess game and experience a surprise annimation at the end. 
 
