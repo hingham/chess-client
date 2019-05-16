@@ -3,7 +3,8 @@
 [Chess-Match](https://chess-match.netlify.com)
 
 #### Server
-[repo](https://github.com/hingham/chess-server)
+[REPO](https://github.com/hingham/chess-server)
+
 This link includes the code that powers the chess match server. It tracks curent games, the position of each piece on the board, and does the work to validates the move. 
 
 #### Front End
